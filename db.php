@@ -5,11 +5,11 @@ require 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = getenv('DB_HOST');        // Database host (e.g., localhost)
-$db   = getenv('DB_NAME');        // Database name
-$user = getenv('DB_USER');        // Database username
-$pass = getenv('DB_PASS');        // Database password
-$charset = 'utf8mb4';             // Database charset
+$host = getenv('DB_HOST');        
+$db   = getenv('DB_NAME');        
+$user = getenv('DB_USER');        
+$pass = getenv('DB_PASS');        
+$charset = 'utf8mb4';             
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
