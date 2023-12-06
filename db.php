@@ -5,11 +5,11 @@ require 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = getenv('DB_HOST');        
-$db   = getenv('DB_NAME');        
-$user = getenv('DB_USER');        
-$pass = getenv('DB_PASS');        
-$charset = 'utf8mb4';             
+$host = $_ENV['DB_HOST'];
+$db   = $_ENV['DB_DATABASE'];
+$user = $_ENV['DB_USERNAME'];
+$pass = $_ENV['DB_PASSWORD'];
+$charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
@@ -20,8 +20,9 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
+    echo "Connected successfully";
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    echo 'Connection failed: ' . $e->getMessage();
 }
 
 ?>
