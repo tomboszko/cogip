@@ -1,6 +1,6 @@
 <?php
 
-require_once 'models/InvoiceModel.php';
+require_once __DIR__ . '/../models/InvoicesModel.php';
 
 class InvoicesController {
     private $model;
@@ -13,10 +13,10 @@ class InvoicesController {
         try {
             $invoices = $this->model->getAllInvoices();
             header('Content-Type: application/json');
-            echo json_encode($invoices);
+            echo json_encode($invoices, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching invoices']);
+            echo json_encode(['message' => 'An error occurred while fetching invoices'], JSON_PRETTY_PRINT);
         }
     }
 

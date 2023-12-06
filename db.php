@@ -20,7 +20,7 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-    echo "Connected successfully";
+    //echo "Connected successfully";
 } catch (\PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();
 }
