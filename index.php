@@ -75,6 +75,13 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->deleteCompany($id);
 });
 
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
+// Fetching all invoices for a company
+$router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
+    $companiesController->getCompanyInvoices($id);
+});
+
 
 
 // Run the router
