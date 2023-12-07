@@ -107,4 +107,17 @@ class CompaniesController {
             echo json_encode(['message' => 'An error occurred while fetching the invoices']);
         }
     }
+
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+        try {
+            $Contacts = $this->model->getCompanyContacts($id);
+            $Contacts = array('Company Contacts' => $Contacts); // Wrap the Contacts array inside another array
+            header('Content-Type: application/json');
+            echo json_encode(Contacts, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'An error occurred while fetching the Contacts']);
+        }
+    }
 }

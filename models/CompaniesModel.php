@@ -57,6 +57,16 @@ class CompanyModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+
+        $query = "SELECT id, contact_name, company_id, email, phone, created_at, updated_at FROM Contacts WHERE company_id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     
     
 }
