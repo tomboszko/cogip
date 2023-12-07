@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/InvoicesModel.php';
+require_once __DIR__ . '/../models/CompaniesModel.php';
 
 class CompaniesController {
     private $model;
@@ -93,10 +94,11 @@ class CompaniesController {
         }
     }
 
+    // Get all invoices for a company
     public function getCompanyInvoices($id) {
         try {
             $invoices = $this->model->getCompanyInvoices($id);
-            $invoices = array('invoices' => $invoices); // Wrap the invoices array inside another array
+            $invoices = array('Company invoices' => $invoices); // Wrap the invoices array inside another array
             header('Content-Type: application/json');
             echo json_encode($invoices, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
