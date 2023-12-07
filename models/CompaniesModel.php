@@ -48,8 +48,8 @@ class CompanyModel {
     }
 
     public function getCompanyInvoices($id) {
-        
-        $query = "SELECT * FROM invoices WHERE id_company = :id";
+
+        $query = "SELECT id, ref, created_at, updated_at FROM invoices WHERE id_company = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
