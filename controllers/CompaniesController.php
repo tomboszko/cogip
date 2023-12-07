@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/InvoicesModel.php';
 require_once __DIR__ . '/../models/CompaniesModel.php';
+require_once __DIR__ . '/../models/ContactsModel.php';
 
 class CompaniesController {
     private $model;
