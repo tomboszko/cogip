@@ -86,21 +86,21 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
 $ContactsController = new ContactsController($pdo);
 
 // Define routes
-$router->get('/Contacts', function() use ($ContactsController) {
+$router->get('/contacts', function() use ($ContactsController) {
     $ContactsController->getAllContacts();
 });
-$router->get('/Contacts/(\d+)', function($id) use ($ContactsController) {
+$router->get('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->getContact($id);
 });
-$router->post('/Contacts', function() use ($ContactsController) {
+$router->post('/contacts', function() use ($ContactsController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $ContactsController->createContact($data);
 });
-$router->put('/Contacts/(\d+)', function($id) use ($ContactsController) {
+$router->put('/contacts/(\d+)', function($id) use ($ContactsController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $ContactsController->updateContact($id, $data);
 });
-$router->delete('/Contacts/(\d+)', function($id) use ($ContactsController) {
+$router->delete('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->deleteContact($id);
 });
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
