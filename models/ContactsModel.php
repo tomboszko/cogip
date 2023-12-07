@@ -22,34 +22,13 @@ class ContactModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createContact($data) {
-        try {
-            // Vérifie si 'contact_name' existe dans $data
-            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
-                http_response_code(400);
-                echo json_encode(['message' => 'Invalid contact_name']);
-                return;
-            }
-    
-            // Utilise ':contact_name' dans la requête SQL
-            $query = "INSERT INTO contacts (contact_name, company_id, email, phone, created_at, updated_at) VALUES (:contact_name, :company_id, :email, :phone, NOW(), NOW())";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':contact_name', $data['contact_name'], PDO::PARAM_STR);
-            $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $data['phone'], PDO::PARAM_STR);
-            $stmt->execute();
-            $contactId = $this->db->lastInsertId();
-    
-            header('Content-Type: application/json');
-            http_response_code(201);
-            echo json_encode(['message' => 'Contact created', 'id' => $contactId]);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while creating the Contact']);
-        }
-    }
-    
+    public function createInvoice($data) {
+        $query = "INSERT INTO invoices (ref, company_id, created_at, updated_at) VALUES (:company_id, NOW(), NOW())";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        return $this->db->lastInsertId();
+    }    
     
     
     public function updateContact($id, $data) {
@@ -71,4 +50,15 @@ class ContactModel {
         $stmt->execute();
         return $stmt->rowCount();
     }
+
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+
+        $query = "SELECT id, contact_name, company_id, email, phone FROM Contacts WHERE company_id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }
