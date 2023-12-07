@@ -12,6 +12,7 @@ class InvoicesController {
     public function getAllInvoices() {
         try {
             $invoices = $this->model->getAllInvoices();
+            $invoices = array('invoices' => $invoices); // Wrap the invoices array inside another array
             header('Content-Type: application/json');
             echo json_encode($invoices, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
