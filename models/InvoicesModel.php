@@ -48,4 +48,12 @@ class InvoiceModel {
         $stmt->execute();
         return $stmt->rowCount();
     }
+
+    // Get the last 2 invoices
+    public function getLastInvoices() {
+        $query = "SELECT * FROM invoices ORDER BY id DESC LIMIT 2";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
