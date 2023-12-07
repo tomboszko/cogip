@@ -1,9 +1,11 @@
 <?php
 
 require 'vendor/autoload.php'; // Autoload dependencies
+
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
+
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'db.php'; // Require database
@@ -81,7 +83,6 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
 $router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
     $companiesController->getCompanyInvoices($id);
 });
-
 
 
 // Run the router
