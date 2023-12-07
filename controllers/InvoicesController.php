@@ -12,7 +12,7 @@ class InvoicesController {
     public function getAllInvoices() {
         try {
             $invoices = $this->model->getAllInvoices();
-            $invoices = array('invoices' => $invoices); // Wrap the invoices array inside another array
+            $invoices = array('All invoices' => $invoices); // Wrap the invoices array inside another array
             header('Content-Type: application/json');
             echo json_encode($invoices, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
@@ -24,9 +24,10 @@ class InvoicesController {
     public function getInvoice($id) {
         try {
             $invoice = $this->model->getInvoiceById($id);
+            $invoice = array('Invoice' => $invoice); // Wrap the invoice array inside another array
             header('Content-Type: application/json');
             if ($invoice) {
-                echo json_encode($invoice);
+                echo json_encode($invoice, JSON_PRETTY_PRINT);
             } else {
                 http_response_code(404);
                 echo json_encode(['message' => 'Invoice not found']);
@@ -97,7 +98,7 @@ class InvoicesController {
     public function getLastInvoices() {
         try {
             $invoices = $this->model->getLastInvoices();
-            $invoices = array('invoices' => $invoices); // Wrap the invoices array inside another array
+            $invoices = array('last invoices' => $invoices); // Wrap the invoices array inside another array
             header('Content-Type: application/json');
             echo json_encode($invoices, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
