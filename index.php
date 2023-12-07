@@ -51,20 +51,26 @@ $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
 $companiesController = new CompaniesController($pdo);
 
 // Define routes
+
+//all companies
 $router->get('/companies', function() use ($companiesController) {
     $companiesController->getAllCompanies();
 });
+//single company
 $router->get('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->getCompany($id);
 });
+//create company
 $router->post('/companies', function() use ($companiesController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $companiesController->createCompany($data);
 });
+//update company
 $router->put('/companies/(\d+)', function($id) use ($companiesController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $companiesController->updateCompany($id, $data);
 });
+//delete company
 $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->deleteCompany($id);
 });
