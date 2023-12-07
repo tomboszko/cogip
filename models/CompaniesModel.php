@@ -47,6 +47,15 @@ class CompanyModel {
         return $stmt->rowCount();
     }
 
+    // Get the last 2 companies
+public function getLastCompanies() {
+        $query = "SELECT * FROM companies ORDER BY id DESC LIMIT 2";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     // Get all invoices for a company
     public function getCompanyInvoices($id) {
 

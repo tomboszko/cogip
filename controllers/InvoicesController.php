@@ -92,4 +92,17 @@ class InvoicesController {
             echo json_encode(['message' => 'An error occurred while deleting the invoice']);
         }
     }
+
+    // Get the last 2 invoices
+    public function getLastInvoices() {
+        try {
+            $invoices = $this->model->getLastInvoices();
+            $invoices = array('invoices' => $invoices); // Wrap the invoices array inside another array
+            header('Content-Type: application/json');
+            echo json_encode($invoices, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'An error occurred while fetching invoices'], JSON_PRETTY_PRINT);
+        }
+    }
 }

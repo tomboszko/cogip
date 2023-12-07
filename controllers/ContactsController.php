@@ -46,7 +46,7 @@ class ContactsController {
                 return;
             }
 
-            $ContactId = $this->model->createContact($data);
+            $ContactId = $this->model->createContacts($data);
             header('Content-Type: application/json');
             http_response_code(201);
             echo json_encode(['message' => 'Contact created', 'id' => $ContactId]);
@@ -94,5 +94,15 @@ class ContactsController {
         }
     }
 
-
+    public function getLastContacts() {
+        try {
+            $contacts = $this->model->getLastContacts();
+            $contacts = array('contacts' => $contacts); // Wrap the contacts array inside another array
+            header('Content-Type: application/json');
+            echo json_encode($contacts, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'An error occurred while fetching contacts'], JSON_PRETTY_PRINT);
+        }
+    }
 }

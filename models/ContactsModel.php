@@ -50,5 +50,23 @@ class ContactModel {
         $stmt->execute();
         return $stmt->rowCount();
     }
+
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+
+        $query = "SELECT id, contact_name, company_id, email, phone FROM Contacts WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Get the last 2 Contacts
+    public function getLastContacts() {
+        $query = "SELECT * FROM contacts ORDER BY id DESC LIMIT 2";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     
 }

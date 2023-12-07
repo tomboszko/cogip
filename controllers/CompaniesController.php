@@ -95,6 +95,19 @@ class CompaniesController {
         }
     }
 
+    // Get the last 2 companies
+public function getLastCompanies() {
+        try {
+            $companies = $this->model->getLastCompanies();
+            $companies = array('Last companies' => $companies); // Wrap the companies array inside another array
+            header('Content-Type: application/json');
+            echo json_encode($companies, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'An error occurred while fetching companies'], JSON_PRETTY_PRINT);
+        }
+    }
+
     // Get all invoices for a company
     public function getCompanyInvoices($id) {
         try {

@@ -50,6 +50,11 @@ $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->deleteInvoice($id);
 });
 
+// Get the last 2 invoices
+$router->get('/invoices/last', function() use ($invoicesController) {
+    $invoicesController->getLastInvoices();
+});
+
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
 // Instantiate the CompaniesController once
@@ -80,6 +85,11 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->deleteCompany($id);
 });
 
+//get last 2 companies
+$router->get('/companies/last', function() use ($companiesController) {
+    $companiesController->getLastCompanies();
+});
+
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
 // Instantiate the ContactsController once
@@ -103,6 +113,12 @@ $router->put('/contacts/(\d+)', function($id) use ($ContactsController) {
 $router->delete('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->deleteContact($id);
 });
+
+// Get the last 2 contacts
+$router->get('/contacts/last', function() use ($ContactsController) {
+    $ContactsController->getLastContacts();
+});
+
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
 // Fetching all invoices for a company
