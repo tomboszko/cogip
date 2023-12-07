@@ -22,10 +22,10 @@ class ContactModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createInvoice($data) {
-        $query = "INSERT INTO invoices (ref, company_id, created_at, updated_at) VALUES (:company_id, NOW(), NOW())";
+    public function createContacts($data) {
+        $query = "INSERT INTO Contacts (contact_name, company_id, email, created_at, phone, updated_at) VALUES (:company_id, NOW(), NOW())";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':contact_name', $data['contact_name'], PDO::PARAM_INT);
         $stmt->execute();
         return $this->db->lastInsertId();
     }    
