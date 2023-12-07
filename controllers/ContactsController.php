@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '../models/ContactsModel.php';
+require_once __DIR__ . '/../models/ContactsModel.php';
 
 class ContactsController {
     private $model;
@@ -23,10 +23,10 @@ class ContactsController {
 
     public function getContact($id) {
         try {
-            $Contact = $this->model->getContactById($id);
+            $contact = $this->model->getContactById($id); // Correction ici
             header('Content-Type: application/json');
-            if ($Contact) {
-                echo json_encode($Contact);
+            if ($contact) { // Correction ici
+                echo json_encode($contact); // Correction ici
             } else {
                 http_response_code(404);
                 echo json_encode(['message' => 'Contact not found']);
@@ -36,12 +36,13 @@ class ContactsController {
             echo json_encode(['message' => 'An error occurred while fetching the Contact']);
         }
     }
+    
 
     public function createContact($data) {
         try {
-            if (!isset($data['Contact_number']) || !is_string($data['Contact_number'])) {
+            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
                 http_response_code(400);
-                echo json_encode(['message' => 'Invalid Contact_number']);
+                echo json_encode(['message' => 'contact_name']);
                 return;
             }
 
@@ -57,9 +58,9 @@ class ContactsController {
 
     public function updateContact($id, $data) {
         try {
-            if (!isset($data['Contact_number']) || !is_string($data['Contact_number'])) {
+            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
                 http_response_code(400);
-                echo json_encode(['message' => 'Invalid Contact_number']);
+                echo json_encode(['message' => 'Invalid contact_name']);
                 return;
             }
 
