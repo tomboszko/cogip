@@ -110,11 +110,10 @@ $router->get('/companies/(\d+)/invoices', function($id) use ($companiesControlle
     $companiesController->getCompanyInvoices($id);
 });
 
-// // Fetching all invoices for a company
-// $router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
-//     $companiesController->getCompanyInvoices($id);
-// });
-
+// Fetching all contacts for a company
+$router->get('/companies/(\d+)/contacts', function($id) use ($companiesController) {
+    $companiesController->getCompanyContacts($id);
+});
 
 // Run the router
 $router->run();
