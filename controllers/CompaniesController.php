@@ -128,24 +128,23 @@ public function getLastCompanies() {
             echo json_encode($contacts, JSON_PRETTY_PRINT);
     }
 
-    // get last invoice and all contacts for a company
-    // public function getShowCompany($id) {
+    // public function getShowCompanyById($id) {
 
-    //         $invoices = $this->model->getShowCompany($id);
-    //         $invoices = array('Show Company' => $invoices => $contacts); // Wrap the invoices array inside another array
+    //         $companies = $this->model->getShowCompanyById($id);
+    //         $company = array('Companies' => $companies); // Wrap the invoices array inside another array
     //         header('Content-Type: application/json');
-    //         echo json_encode($invoices, JSON_PRETTY_PRINT);
+    //         echo json_encode($company, JSON_PRETTY_PRINT);
     // }
+    // get last invoice and all contacts for a company
 
-    public function showCompany($id) {
-        $data = $this->getShowCompany($id);
-    
-        // Wrap the data array inside another array
-        $result = ['ShowCompany' => $data];
-    
+    public function getshowCompany($id) {
+
+        $invoices = $this->model->getCompanyInvoices($id);
+        $contacts = $this->model->getCompanyContacts($id);
+        $companies = $this->model->getShowCompanyById($id);
+        $company = array('Companies' => $companies, 'Invoices' => $invoices, 'Contacts' => $contacts); // Wrap the invoices array inside another array
         header('Content-Type: application/json');
-        echo json_encode($result, JSON_PRETTY_PRINT);
+        echo json_encode($company, JSON_PRETTY_PRINT);
     }
-
 }
 

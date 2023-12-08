@@ -55,7 +55,7 @@ class CompanyModel {
     }
 
     // Get the last 2 companies
-public function getLastCompanies() {
+    public function getLastCompanies() {
         $query = "SELECT * FROM companies ORDER BY id DESC LIMIT 2";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
@@ -83,26 +83,11 @@ public function getLastCompanies() {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // get last invoices and all contacts for a company
-    public function getShowCompany($id) {
-        $queryInvoices = "SELECT id, ref, created_at, updated_at FROM invoices WHERE id_company = :id";
-        $stmtInvoices = $this->db->prepare($queryInvoices);
-        $stmtInvoices->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmtInvoices->execute();
-        $invoices = $stmtInvoices->fetchAll(PDO::FETCH_ASSOC);
-    
-        $queryContacts = "SELECT id, name, company_id, email, phone, created_at, updated_at FROM contacts WHERE company_id = :id";
-        $stmtContacts = $this->db->prepare($queryContacts);
-        $stmtContacts->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmtContacts->execute();
-        $contacts = $stmtContacts->fetchAll(PDO::FETCH_ASSOC);
-    
-        // Return the result as an associative array
-        return ['invoices' => $invoices, 'contacts' => $contacts];
+    public function getShowCompanyById($id) {
+        $query = "SELECT id, name, type_id, country, tva, created_at, updated_at FROM companies where id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
 }
-    
-
-
-

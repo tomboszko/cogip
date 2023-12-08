@@ -131,8 +131,6 @@ $router->get('/companies/(\d+)/show', function ($id) use ($companiesController) 
     $companiesController->getShowCompany($id);
 });
 
-
-
 // Run the router
 $router->run();
 
