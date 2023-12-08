@@ -7,15 +7,49 @@ class InvoiceModel {
         $this->db = $database;
     }
 
-public function getAllInvoices() {
-    $query = "SELECT invoices.*, companies.name AS company_name 
-          FROM invoices 
-          INNER JOIN companies ON invoices.id_company = companies.id";
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    public function getAllInvoices($page) {
+        // Ensure page is within a valid range
+        $page = max(1, min($page, PHP_INT_MAX));
 
+        $itemsPerPage = 5; // Set items per page to 5
+
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $query = "SELECT invoices.*, companies.name AS company_name 
+          FROM invoices 
+          INNER JOIN companies ON invoices.id_company = companies.id 
+          ORDER BY invoices.id 
+          LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $invoicesData = [];
+        foreach ($invoices as $invoice) {
+          
+            $invoicesData[] = $invoice;
+        }
+
+        $query = "SELECT COUNT(*) FROM invoices";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $totalInvoices = $stmt->fetchColumn();
+
+        $totalPages = ceil($totalInvoices / $itemsPerPage);
+        return [
+            'pagination' => [
+                'currentPage' => $page,
+                'itemsPerPage' => $itemsPerPage,
+                'totalItems' => $totalInvoices,
+                'totalPages' => $totalPages
+            ],
+            'invoices' => $invoicesData
+        ];
+    }
+    
     public function getInvoiceById($id) {
         $query = "SELECT invoices.*, companies.name AS company_name 
           FROM invoices 

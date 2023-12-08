@@ -1,25 +1,40 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../models/InvoicesModel.php';
 
 class InvoicesController {
     private $model;
+    private $db;
 
     public function __construct($pdo) {
         $this->model = new InvoiceModel($pdo);
+        $this->db = $pdo;
     }
 
-    public function getAllInvoices() {
-        try {
-            $invoices = $this->model->getAllInvoices();
-            $invoices = array('All invoices' => $invoices); // Wrap the invoices array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($invoices, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching invoices'], JSON_PRETTY_PRINT);
+public function getAllInvoices() {
+    $invoicesByPage = [];
+    $page = 1;
+    $itemsPerPage = 5; // Set items per page to 5
+
+    do {
+        $result = $this->model->getAllInvoices($page, $itemsPerPage);
+        if (count($result['invoices']) > 0) {
+            $invoicesByPage[] = $result; // Change this line
+            $page++;
+        } else {
+            break;
         }
-    }
+    } while (true);
+
+    header('Content-Type: application/json');
+    echo json_encode(['invoices' => $invoicesByPage], JSON_PRETTY_PRINT);
+}
+
+
 
     public function getInvoice($id) {
         try {

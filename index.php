@@ -19,10 +19,9 @@ $router = new Router();
 $invoicesController = new InvoicesController($pdo);
 
 // Define routes 
-
 // Fetching all invoices
-$router->get('/invoices', function() use ($invoicesController) {
-    $invoicesController->getAllInvoices();
+$router->get('/invoices(/(\d+))?', function($page = 1) use ($invoicesController) {
+    $invoicesController->getAllInvoices((int)$page, 10); // Cast $page to int
 });
 
 // Fetching a single invoice
