@@ -8,14 +8,21 @@ class CompanyModel {
     }
 
     public function getAllCompanies() {
-        $query = "SELECT * FROM companies";
+        $query = "SELECT companies.*, types.name AS type_name 
+          FROM companies 
+          INNER JOIN types ON companies.type_id = types.id";
+
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getCompanyById($id) {
-        $query = "SELECT * FROM companies WHERE id = :id";
+        $query = "SELECT companies.*, types.name AS type_name 
+          FROM companies 
+          INNER JOIN types ON companies.type_id = types.id 
+          WHERE companies.id = :id";
+
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
