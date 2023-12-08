@@ -8,12 +8,23 @@ $whoops->register();
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'controllers/ContactsController.php'; //
+require 'controllers/WelcomeController.php'; //
 
 require 'db.php'; // Require database
 
 use Bramus\Router\Router;
 
 $router = new Router();
+
+// Instantiate the welcome
+$welcomeController = new WelcomeController($pdo);
+
+// Define routes
+$router->get('/', function() use ($welcomeController) {
+    $welcomeController->getLastCompanies();
+    $welcomeController->getLastContacts();
+    $welcomeController->getLastInvoices();
+});
 
 // Instantiate the InvoicesController once
 $invoicesController = new InvoicesController($pdo);

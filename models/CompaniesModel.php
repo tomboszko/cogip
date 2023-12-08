@@ -54,13 +54,7 @@ class CompanyModel {
         return $stmt->rowCount();
     }
 
-    // Get the last 2 companies
-    public function getLastCompanies() {
-        $query = "SELECT * FROM companies ORDER BY id DESC LIMIT 2";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+
 
 
     // Get all invoices for a company
@@ -95,7 +89,7 @@ class CompanyModel {
 
         // Get a company for show
         public function getShowCompanyById($id) {
-            $query = "SELECT companies.id, companies.name, companies.type_id, companies.country, companies.tva, companies.created_at, companies.updated_at, types.name AS type_name
+            $query = "SELECT companies.*, types.name AS type_name
                       FROM companies 
                       INNER JOIN types ON companies.type_id = types.id
                       WHERE companies.id = :id";

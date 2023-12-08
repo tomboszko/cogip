@@ -15,24 +15,24 @@ class InvoicesController {
         $this->db = $pdo;
     }
 
-public function getAllInvoices() {
-    $invoicesByPage = [];
-    $page = 1;
-    $itemsPerPage = 5; // Set items per page to 5
+    public function getAllInvoices() {
+        $invoicesByPage = [];
+        $page = 1;
+        $itemsPerPage = 5; // Set items per page to 5
 
-    do {
-        $result = $this->model->getAllInvoices($page, $itemsPerPage);
-        if (count($result['invoices']) > 0) {
-            $invoicesByPage[] = $result; // Change this line
-            $page++;
-        } else {
-            break;
-        }
-    } while (true);
+        do {
+            $result = $this->model->getAllInvoices($page, $itemsPerPage);
+            if (count($result['invoices']) > 0) {
+                $invoicesByPage[] = $result; // Change this line
+                $page++;
+            } else {
+                break;
+            }
+        } while (true);
 
-    header('Content-Type: application/json');
-    echo json_encode(['invoices' => $invoicesByPage], JSON_PRETTY_PRINT);
-}
+        header('Content-Type: application/json');
+        echo json_encode(['invoices' => $invoicesByPage], JSON_PRETTY_PRINT);
+    }
 
 
 
@@ -109,16 +109,4 @@ public function getAllInvoices() {
         }
     }
 
-    // Get the last 2 invoices
-    public function getLastInvoices() {
-        try {
-            $invoices = $this->model->getLastInvoices();
-            $invoices = array('last invoices' => $invoices); // Wrap the invoices array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($invoices, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching invoices'], JSON_PRETTY_PRINT);
-        }
-    }
 }
