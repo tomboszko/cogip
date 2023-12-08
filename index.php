@@ -21,7 +21,7 @@ $router = new Router();
 $welcomeController = new WelcomeController($pdo);
 
 // Define routes
-$router->get('/', function() use ($welcomeController) {
+$router->get('/welcome', function() use ($welcomeController) {
     $welcomeController->getLastCompanies();
     $welcomeController->getLastContacts();
     $welcomeController->getLastInvoices();
@@ -142,7 +142,7 @@ $router->get('/contacts/last', function() use ($ContactsController) {
 
 // Fetching all invoices for a company
 $router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
-    $ShowController->getCompanyInvoices($id);
+    $companiesController->getCompanyInvoices($id);
 });
 
 $ShowController = new ShowController($pdo);
