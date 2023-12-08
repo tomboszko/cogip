@@ -34,7 +34,7 @@ $router->get('/invoices', function() use ($invoicesController) {
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
     // Call the controller method with the page number
-    $invoicesController->getAllInvoices($page, 10); // 10 items per page
+    $invoicesController->getAllInvoices($page, 5); 
 });
 
 
