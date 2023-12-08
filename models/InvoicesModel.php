@@ -37,6 +37,11 @@ class InvoiceModel {
         // Calculating the total number of pages
         $totalPages = ceil($totalInvoices / $itemsPerPage);
 
+        // Check if the current page is greater than the total number of pages
+    if ($pagination->getCurrentPage() > $totalPages) {
+        return ['message' => "Page doesn't exist"];
+    }
+
         // Returning the invoices data along with pagination information
         return [
             'pagination' => [
