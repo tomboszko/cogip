@@ -27,7 +27,7 @@ $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
 });
 
 
-// Fetching all invoices
+// Fetching all invoices with pagination
 $router->get('/invoices', function() use ($invoicesController) {
     // Retrieve the 'page' query parameter, defaulting to 1 if not present
     // example : /invoices?page=3  show only page 3
