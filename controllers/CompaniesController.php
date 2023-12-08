@@ -128,15 +128,6 @@ public function getLastCompanies() {
             echo json_encode($contacts, JSON_PRETTY_PRINT);
     }
 
-    // public function getShowCompanyById($id) {
-
-    //         $companies = $this->model->getShowCompanyById($id);
-    //         $company = array('Companies' => $companies); // Wrap the invoices array inside another array
-    //         header('Content-Type: application/json');
-    //         echo json_encode($company, JSON_PRETTY_PRINT);
-    // }
-    // get last invoice and all contacts for a company
-
     public function getshowCompany($id) {
 
         $invoices = $this->model->getCompanyInvoices($id);

@@ -83,6 +83,7 @@ class CompanyModel {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        // Get  company for show
     public function getShowCompanyById($id) {
         $query = "SELECT id, name, type_id, country, tva, created_at, updated_at FROM companies where id = :id";
         $stmt = $this->db->prepare($query);
