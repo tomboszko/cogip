@@ -111,14 +111,31 @@ public function getLastCompanies() {
 
     // Get all invoices for a company
     public function getCompanyInvoices($id) {
-        try {
+
             $invoices = $this->model->getCompanyInvoices($id);
             $invoices = array('Company invoices' => $invoices); // Wrap the invoices array inside another array
             header('Content-Type: application/json');
             echo json_encode($invoices, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching the invoices']);
-        }
+
+    }
+
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+
+            $contacts = $this->model->getCompanyContacts($id);
+            $contacts = array('Company contacts' => $contacts); // Wrap the Contacts array inside another array
+            header('Content-Type: application/json');
+            echo json_encode($contacts, JSON_PRETTY_PRINT);
+    }
+
+    public function getshowCompany($id) {
+
+        $invoices = $this->model->getCompanyInvoices($id);
+        $contacts = $this->model->getCompanyContacts($id);
+        $companies = $this->model->getShowCompanyById($id);
+        $company = array('Companies' => $companies, 'Invoices' => $invoices, 'Contacts' => $contacts); // Wrap the invoices array inside another array
+        header('Content-Type: application/json');
+        echo json_encode($company, JSON_PRETTY_PRINT);
     }
 }
+

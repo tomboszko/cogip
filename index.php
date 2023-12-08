@@ -125,6 +125,10 @@ $router->get('/companies/(\d+)/invoices', function($id) use ($companiesControlle
     $companiesController->getCompanyInvoices($id);
 });
 
+// Fetching all contacts for a company
+$router->get('/companies/(\d+)/show', function ($id) use ($companiesController) {
+    $companiesController->getShowCompany($id);
+});
 
 // Run the router
 $router->run();
