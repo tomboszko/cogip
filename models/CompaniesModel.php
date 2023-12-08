@@ -65,30 +65,46 @@ class CompanyModel {
 
     // Get all invoices for a company
     public function getCompanyInvoices($id) {
-
-            $query = "SELECT id, ref, created_at, updated_at FROM invoices WHERE id_company = :id";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Get all Contacts for a company
-    public function getCompanyContacts($id) {
-
-            $query = "SELECT id, name, company_id, email, phone, created_at, updated_at FROM contacts WHERE company_id = :id";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-        // Get  company for show
-    public function getShowCompanyById($id) {
-        $query = "SELECT id, name, type_id, country, tva, created_at, updated_at FROM companies where id = :id";
+        $query = "SELECT invoices.*, companies.name AS company_name 
+        FROM invoices 
+        INNER JOIN companies ON invoices.id_company = companies.id
+                WHERE invoices.id_company = :id";
+        
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+
+    // Get all Contacts for a company
+    public function getCompanyContacts($id) {
+            $query = "SELECT contacts.*, companies.name AS company_name 
+                FROM contacts 
+                INNER JOIN companies ON contacts.company_id = companies.id
+                  WHERE contacts.company_id = :id";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+
+        // Get a company for show
+        public function getShowCompanyById($id) {
+            $query = "SELECT companies.id, companies.name, companies.type_id, companies.country, companies.tva, companies.created_at, companies.updated_at, types.name AS type_name
+                      FROM companies 
+                      INNER JOIN types ON companies.type_id = types.id
+                      WHERE companies.id = :id";
+            
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        
 }

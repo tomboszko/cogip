@@ -7,12 +7,16 @@ class ContactModel {
         $this->db = $database;
     }
 
+
     public function getAllContacts() {
-        $query = "SELECT * FROM contacts";
+        $query = "SELECT contacts.*, companies.name AS company_name 
+              FROM contacts 
+              INNER JOIN companies ON contacts.company_id = companies.id";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function getContactById($id) {
         $query = "SELECT * FROM contacts WHERE id = :id";
