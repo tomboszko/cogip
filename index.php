@@ -2,14 +2,12 @@
 
 require 'vendor/autoload.php'; // Autoload dependencies
 
-
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'controllers/ContactsController.php'; //
-
 
 require 'db.php'; // Require database
 
