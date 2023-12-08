@@ -16,27 +16,22 @@ class InvoicesController {
         $this->db = $pdo;
     }
 
-public function getAllInvoices($currentPage) {
-    $itemsPerPage = 5; // Set items per page to 5
-    $pagination = new Pagination($itemsPerPage, $currentPage);
-
-    $invoicesByPage = [];
-    $page = 1;
-
-    do {
+    public function getAllInvoices($currentPage) {
+        $itemsPerPage = 5; // Set items per page to 5
+    
+        // Initialize Pagination object with current page and items per page
+        $pagination = new Pagination($itemsPerPage, $currentPage);
+    
+        // Get invoices for the current page from the model
         $result = $this->model->getAllInvoices($pagination);
-        if (count($result['invoices']) > 0) {
-            $invoicesByPage[] = $result;
-            $page++;
-        } else {
-            break;
-        }
-    } while (true);
-
-    header('Content-Type: application/json');
-    echo json_encode(['invoices' => $invoicesByPage], JSON_PRETTY_PRINT);
-}
-
+    
+        // Set Content-Type header for JSON response
+        header('Content-Type: application/json');
+    
+        // Return the invoices and pagination info as JSON
+        echo json_encode($result, JSON_PRETTY_PRINT);
+    }
+    
 
     public function getInvoice($id) {
         try {

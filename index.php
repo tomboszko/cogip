@@ -25,10 +25,18 @@ $invoicesController = new InvoicesController($pdo);
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
 });
+
+
 // Fetching all invoices
-$router->get('/invoices(/(\d+))?', function($page = 1) use ($invoicesController) {
-    $invoicesController->getAllInvoices((int)$page, 10); // Cast $page to int
+$router->get('/invoices', function() use ($invoicesController) {
+    // Retrieve the 'page' query parameter, defaulting to 1 if not present
+    // example : /invoices?page=3  show only page 3
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    // Call the controller method with the page number
+    $invoicesController->getAllInvoices($page, 10); // 10 items per page
 });
+
 
 
 // Creating an invoice

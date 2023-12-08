@@ -8,31 +8,36 @@ class InvoiceModel {
     }
 
     public function getAllInvoices(Pagination $pagination) {
+        // Calculating the offset for SQL query based on the current page and items per page
         $offset = $pagination->getOffset();
         $itemsPerPage = $pagination->getItemsPerPage();
 
+        // SQL query to fetch invoices with company names, ordered by invoice ID
         $query = "SELECT invoices.*, companies.name AS company_name 
-          FROM invoices 
-          INNER JOIN companies ON invoices.id_company = companies.id 
-          ORDER BY invoices.id 
-          LIMIT :limit OFFSET :offset";
+                  FROM invoices 
+                  INNER JOIN companies ON invoices.id_company = companies.id 
+                  ORDER BY invoices.id 
+                  LIMIT :limit OFFSET :offset";
 
+        // Preparing and executing the SQL query with bound parameters
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
-        $invoicesData = [];
-        while ($invoice = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $invoicesData[] = $invoice;
-        }
+        // Fetching the invoices data
+        $invoicesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $query = "SELECT COUNT(*) FROM invoices";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $totalInvoices = $stmt->fetchColumn();
+        // Query to count the total number of invoices
+        $queryTotal = "SELECT COUNT(*) FROM invoices";
+        $stmtTotal = $this->db->prepare($queryTotal);
+        $stmtTotal->execute();
+        $totalInvoices = $stmtTotal->fetchColumn();
 
+        // Calculating the total number of pages
         $totalPages = ceil($totalInvoices / $itemsPerPage);
+
+        // Returning the invoices data along with pagination information
         return [
             'pagination' => [
                 'currentPage' => $pagination->getCurrentPage(),
@@ -43,6 +48,8 @@ class InvoiceModel {
             'invoices' => $invoicesData
         ];
     }
+
+
     
     public function getInvoiceById($id) {
         $query = "SELECT invoices.*, companies.name AS company_name 
