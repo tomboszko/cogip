@@ -7,13 +7,9 @@ class InvoiceModel {
         $this->db = $database;
     }
 
-    public function getAllInvoices($page) {
-        // Ensure page is within a valid range
-        $page = max(1, min($page, PHP_INT_MAX));
-
-        $itemsPerPage = 5; // Set items per page to 5
-
-        $offset = ($page - 1) * $itemsPerPage;
+    public function getAllInvoices(Pagination $pagination) {
+        $offset = $pagination->getOffset();
+        $itemsPerPage = $pagination->getItemsPerPage();
 
         $query = "SELECT invoices.*, companies.name AS company_name 
           FROM invoices 
@@ -25,11 +21,9 @@ class InvoiceModel {
         $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
-        $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $invoicesData = [];
-        foreach ($invoices as $invoice) {
-          
+        while ($invoice = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $invoicesData[] = $invoice;
         }
 
@@ -41,7 +35,7 @@ class InvoiceModel {
         $totalPages = ceil($totalInvoices / $itemsPerPage);
         return [
             'pagination' => [
-                'currentPage' => $page,
+                'currentPage' => $pagination->getCurrentPage(),
                 'itemsPerPage' => $itemsPerPage,
                 'totalItems' => $totalInvoices,
                 'totalPages' => $totalPages

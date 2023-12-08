@@ -19,15 +19,17 @@ $router = new Router();
 $invoicesController = new InvoicesController($pdo);
 
 // Define routes 
-// Fetching all invoices
-$router->get('/invoices(/(\d+))?', function($page = 1) use ($invoicesController) {
-    $invoicesController->getAllInvoices((int)$page, 10); // Cast $page to int
-});
+
 
 // Fetching a single invoice
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
 });
+// Fetching all invoices
+$router->get('/invoices(/(\d+))?', function($page = 1) use ($invoicesController) {
+    $invoicesController->getAllInvoices((int)$page, 10); // Cast $page to int
+});
+
 
 // Creating an invoice
 $router->post('/invoices', function() use ($invoicesController) {

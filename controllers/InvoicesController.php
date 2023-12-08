@@ -5,6 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../models/InvoicesModel.php';
+require_once __DIR__ . '/../models/Pagination.php';
 
 class InvoicesController {
     private $model;
@@ -15,15 +16,17 @@ class InvoicesController {
         $this->db = $pdo;
     }
 
-public function getAllInvoices() {
+public function getAllInvoices($currentPage) {
+    $itemsPerPage = 5; // Set items per page to 5
+    $pagination = new Pagination($itemsPerPage, $currentPage);
+
     $invoicesByPage = [];
     $page = 1;
-    $itemsPerPage = 5; // Set items per page to 5
 
     do {
-        $result = $this->model->getAllInvoices($page, $itemsPerPage);
+        $result = $this->model->getAllInvoices($pagination);
         if (count($result['invoices']) > 0) {
-            $invoicesByPage[] = $result; // Change this line
+            $invoicesByPage[] = $result;
             $page++;
         } else {
             break;
@@ -33,7 +36,6 @@ public function getAllInvoices() {
     header('Content-Type: application/json');
     echo json_encode(['invoices' => $invoicesByPage], JSON_PRETTY_PRINT);
 }
-
 
 
     public function getInvoice($id) {
