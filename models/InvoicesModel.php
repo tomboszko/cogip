@@ -7,15 +7,20 @@ class InvoiceModel {
         $this->db = $database;
     }
 
-    public function getAllInvoices() {
-        $query = "SELECT * FROM invoices";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+public function getAllInvoices() {
+    $query = "SELECT invoices.*, companies.name AS company_name 
+          FROM invoices 
+          INNER JOIN companies ON invoices.id_company = companies.id";
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     public function getInvoiceById($id) {
-        $query = "SELECT * FROM invoices WHERE id = :id";
+        $query = "SELECT invoices.*, companies.name AS company_name 
+          FROM invoices 
+          INNER JOIN companies ON invoices.id_company = companies.id 
+          WHERE invoices.id = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -51,7 +56,12 @@ class InvoiceModel {
 
     // Get the last 2 invoices
     public function getLastInvoices() {
-        $query = "SELECT * FROM invoices ORDER BY id DESC LIMIT 2";
+        $query = "SELECT invoices.*, companies.name AS company_name 
+          FROM invoices 
+          INNER JOIN companies ON invoices.id_company = companies.id 
+          ORDER BY invoices.id DESC 
+          LIMIT 2";
+
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

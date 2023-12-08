@@ -28,7 +28,8 @@ class CompaniesController {
             $company = $this->model->getCompanyById($id);
             header('Content-Type: application/json');
             if ($company) {
-                echo json_encode($company);
+                echo json_encode($company, JSON_PRETTY_PRINT);
+
             } else {
                 http_response_code(404);
                 echo json_encode(['message' => 'Company not found']);
