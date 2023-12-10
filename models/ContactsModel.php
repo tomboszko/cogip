@@ -7,7 +7,6 @@ class ContactModel {
         $this->db = $database;
     }
 
-
     public function getAllContacts(Pagination $pagination) {
         // Calculating the offset for SQL query based on the current page and items per page
         $offset = $pagination->getOffset();
