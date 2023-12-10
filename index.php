@@ -71,8 +71,13 @@ $companiesController = new CompaniesController($pdo);
 
 //all companies
 $router->get('/companies', function() use ($companiesController) {
-    $companiesController->getAllCompanies();
+    //retrieve the 'page' query parameter, defaulting to 1 if not present
+    //example : /companies?page=3  show only page 3
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    //call the controller method with the page number
+    $companiesController->getAllCompanies($page, 5);
 });
+
 //single company
 $router->get('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->getCompany($id);
