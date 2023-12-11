@@ -4,7 +4,7 @@ require_once __DIR__ . '/../models/InvoicesModel.php';
 require_once __DIR__ . '/../models/CompaniesModel.php';
 require_once __DIR__ . '/../models/ContactsModel.php';
 require_once __DIR__ . '/../models/ErrorModel.php';
-
+// 
 class CompaniesController {
     private $model;
     
@@ -15,6 +15,7 @@ class CompaniesController {
     }
 
     public function getAllCompanies($currentPage) {
+        $errorModel = new ErrorModel();
         try {
             $itemsPerPage = 5; // Set items per page to 5
             // Initialize Pagination object with current page and items per page
@@ -31,7 +32,7 @@ class CompaniesController {
                 'status' => 200, 
                 'data' => $result], JSON_PRETTY_PRINT);
         } catch (Exception $e) {
-            $errorModel = new ErrorModel();
+            
             $errorModel->logError($e);
             $errorModel->sendErrorResponse($e);
         }
@@ -62,7 +63,7 @@ class CompaniesController {
     }
 
     public function createCompany($data) {
-        $errorModel = new ErrorModel(); // Instantiate the ErrorModel
+       $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
             if (!isset($data['name']) || !is_string($data['name'])) {
                 http_response_code(400);
