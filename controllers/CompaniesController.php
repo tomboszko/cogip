@@ -8,10 +8,8 @@ require_once __DIR__ . '/../models/ErrorModel.php';
 class CompaniesController {
     private $model;
     
-
     public function __construct($pdo) {
         $this->model = new CompanyModel($pdo);
-        
     }
 
     public function getAllCompanies($currentPage) {
