@@ -27,7 +27,9 @@ class CompaniesController {
             http_response_code(200);
 
             // Return the companies and pagination info as JSON
-            echo json_encode(['status' => 200, 'data' => $result], JSON_PRETTY_PRINT);
+            echo json_encode([
+                'status' => 200, 
+                'data' => $result], JSON_PRETTY_PRINT);
         } catch (Exception $e) {
             $errorModel = new ErrorModel();
             $errorModel->logError($e);
@@ -36,18 +38,21 @@ class CompaniesController {
     }
 
 
-
-
     public function getCompany($id) {
         $errorModel = new ErrorModel();
         try {
             $company = $this->model->getCompanyById($id);
             header('Content-Type: application/json');
             if ($company) {
-                echo json_encode($company, JSON_PRETTY_PRINT);
+                http_response_code(200);
+                echo json_encode([
+                    'status' => 200, 
+                     'data' => $company], JSON_PRETTY_PRINT);
             } else {
                 http_response_code(404);
-                echo json_encode(['message' => 'Company not found']);
+                echo json_encode([
+                    'status' => 404, 
+                    'message' => 'Company not found']);
             }
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
@@ -68,7 +73,10 @@ class CompaniesController {
             $companyId = $this->model->createCompany($data);
             header('Content-Type: application/json');
             http_response_code(201);
-            echo json_encode(['message' => 'Company created', 'id' => $companyId]);
+            echo json_encode([
+                'status' => 201,
+                'message' => 'Company created', 
+                'id' => $companyId]);
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
@@ -81,17 +89,23 @@ class CompaniesController {
         try {
             if (!isset($data['company_name']) || !is_string($data['company_name'])) {
                 http_response_code(400);
-                echo json_encode(['message' => 'Invalid company_name']);
+                echo json_encode([
+                    'status' => 400,
+                    'message' => 'Invalid company_name']);
                 return;
             }
 
             $result = $this->model->updateCompany($id, $data);
             header('Content-Type: application/json');
             if ($result) {
-                echo json_encode(['message' => 'Company updated']);
+                echo json_encode([
+                    'status' => 200,
+                    'message' => 'Company updated']);
             } else {
                 http_response_code(404);
-                echo json_encode(['message' => 'Company not found or no changes made']);
+                echo json_encode([
+                    'status' => 404,
+                    'message' => 'Company not found or no changes made']);
             }
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
@@ -106,10 +120,14 @@ class CompaniesController {
             $result = $this->model->deleteCompany($id);
             header('Content-Type: application/json');
             if ($result) {
-                echo json_encode(['message' => 'Company deleted']);
+                echo json_encode([
+                    'status' => 200,
+                    'message' => 'Company deleted']);
             } else {
                 http_response_code(404);
-                echo json_encode(['message' => 'Company not found']);
+                echo json_encode([
+                    'status' => 404,
+                    'message' => 'Company not found']);
             }
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
