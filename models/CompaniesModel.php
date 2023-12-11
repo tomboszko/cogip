@@ -48,6 +48,7 @@ class CompanyModel {
             ],
             'companies' => $companiesData
         ];
+        
     }
 
 

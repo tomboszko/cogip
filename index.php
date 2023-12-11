@@ -69,10 +69,10 @@ $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->deleteInvoice($id);
 });
 
-// Get the last 2 invoices
-$router->get('/invoices/last', function() use ($invoicesController) {
-    $invoicesController->getLastInvoices();
-});
+// // Get the last 2 invoices
+// $router->get('/invoices/last', function() use ($invoicesController) {
+//     $invoicesController->getLastInvoices();
+// });
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
@@ -109,10 +109,10 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->deleteCompany($id);
 });
 
-//get last 2 companies
-$router->get('/companies/last', function() use ($companiesController) {
-    $companiesController->getLastCompanies();
-});
+// //get last 2 companies
+// $router->get('/companies/last', function() use ($companiesController) {
+//     $companiesController->getLastCompanies();
+// });
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
@@ -149,10 +149,10 @@ $router->delete('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->deleteContact($id);
 });
 
-// Get the last 2 contacts
-$router->get('/contacts/last', function() use ($ContactsController) {
-    $ContactsController->getLastContacts();
-});
+// // Get the last 2 contacts
+// $router->get('/contacts/last', function() use ($ContactsController) {
+//     $ContactsController->getLastContacts();
+// });
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
