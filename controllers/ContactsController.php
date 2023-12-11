@@ -2,25 +2,33 @@
 
 require_once __DIR__ . '/../models/ContactsModel.php';
 
+
 class ContactsController {
     private $model;
+    private $db;
 
     public function __construct($pdo) {
         $this->model = new ContactModel($pdo);
+        $this->db = $pdo;
     }
 
-    public function getAllContacts() {
-        try {
-            $contacts = $this->model->getAllContacts();
-            $contacts = array('contacts' => $contacts); // Wrap the contacts array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($contacts, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching contacts'], JSON_PRETTY_PRINT);
-        }
+    public function getAllContacts($currentPage) {
+        $itemsPerPage = 5; // Set items per page to 5
+    
+        // Initialize Pagination object with current page and items per page
+        $pagination = new Pagination($itemsPerPage, $currentPage);
+    
+        // Get contacts for the current page from the model
+        $result = $this->model->getAllContacts($pagination);
+    
+        // Set Content-Type header for JSON response
+        header('Content-Type: application/json');
+    
+        // Return the contacts and pagination info as JSON
+        echo json_encode($result, JSON_PRETTY_PRINT);
     }
 
+// fetch a single contact by id
     public function getContact($id) {
         try {
             $contact = $this->model->getContactById($id); // Correction ici

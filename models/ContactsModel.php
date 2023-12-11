@@ -7,14 +7,47 @@ class ContactModel {
         $this->db = $database;
     }
 
-
-    public function getAllContacts() {
+    public function getAllContacts(Pagination $pagination) {
+        // Calculating the offset for SQL query based on the current page and items per page
+        $offset = $pagination->getOffset();
+        $itemsPerPage = $pagination->getItemsPerPage();
         $query = "SELECT contacts.*, companies.name AS company_name 
               FROM contacts 
-              INNER JOIN companies ON contacts.company_id = companies.id";
+              INNER JOIN companies ON contacts.company_id = companies.id
+              LIMIT :limit OFFSET :offset";
+
+              // Preparing and executing the SQL query with bound parameters
+
         $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Fetching the contacts data
+        $contactsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Query to count the total number of contacts
+        $queryTotal = "SELECT COUNT(*) FROM contacts";
+        $stmtTotal = $this->db->prepare($queryTotal);
+        $stmtTotal->execute();
+        $totalContacts = $stmtTotal->fetchColumn();
+
+        // Calculating the total number of pages
+        $totalPages = ceil($totalContacts / $itemsPerPage);
+
+        // Check if the current page is greater than the total number of pages
+        if ($pagination->getCurrentPage() > $totalPages) {
+            return ['message' => "Page doesn't exist"];
+        }
+        // Returning the contacts data along with pagination information
+        return [
+            'pagination' => [
+                'currentPage' => $pagination->getCurrentPage(),
+                'itemsPerPage' => $itemsPerPage,
+                'totalItems' => $totalContacts,
+                'totalPages' => $totalPages
+            ],
+            'contacts' => $contactsData
+        ];
     }
     
 

@@ -6,22 +6,27 @@ require_once __DIR__ . '/../models/ContactsModel.php';
 
 class CompaniesController {
     private $model;
+    private $db;
 
     public function __construct($pdo) {
         $this->model = new CompanyModel($pdo);
+        $this->db = $pdo;
     }
 
-    public function getAllCompanies() {
-        try {
-            $companies = $this->model->getAllCompanies();
-            $companies = array('companies' => $companies); // Wrap the companies array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($companies, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching companies'], JSON_PRETTY_PRINT);
-        }
+    public function getAllCompanies($currentPage) {
+        $itemsPerPage = 5; // Set items per page to 5
+        // Initialize Pagination object with current page and items per page
+        $pagination = new Pagination($itemsPerPage, $currentPage);
+        // Get companies for the current page from the model
+        $result = $this->model->getAllCompanies($pagination);
+        // Set Content-Type header for JSON response
+        header('Content-Type: application/json');
+        // Return the companies and pagination info as JSON
+        echo json_encode($result, JSON_PRETTY_PRINT);
     }
+
+
+
 
     public function getCompany($id) {
         try {
