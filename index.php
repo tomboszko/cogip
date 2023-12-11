@@ -140,12 +140,13 @@ $router->get('/contacts/last', function() use ($ContactsController) {
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
-// Fetching all invoices for a company
-$router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
-    $companiesController->getCompanyInvoices($id);
-});
-
 $ShowController = new ShowController($pdo);
+
+// // Fetching all invoices for a company
+// $router->get('/companies/(\d+)/invoices', function($id) use ($companiesController) {
+//     $ShowController->getCompanyInvoices($id);
+// });
+
 
 // Fetching all contacts for a company
 $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {

@@ -19,7 +19,10 @@ class ContactModel {
     
 
     public function getContactById($id) {
-        $query = "SELECT * FROM contacts WHERE id = :id";
+        $query = "SELECT contacts.*, companies.name AS company_name 
+        FROM contacts 
+        INNER JOIN companies ON contacts.company_id = companies.id
+                  WHERE contacts.id = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
