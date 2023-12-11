@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../models/ShowModel.php';
 
+//\\//\\JE N'AI PAS FAIT LA GESTION DES ERREURS ( a discuter avec l'équipe) \\//\\//
+
+
 class ShowController {
     private $model;
 
