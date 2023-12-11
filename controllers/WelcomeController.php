@@ -1,9 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../models/InvoicesModel.php';
-require_once __DIR__ . '/../models/CompaniesModel.php';
-require_once __DIR__ . '/../models/ContactsModel.php';
 require_once __DIR__ . '/../models/WelcomeModel.php';
+
+namespace Cogip\Controllers;
+
+use Cogip\Models\WelcomeModel;
 
 class WelcomeController {
     private $model;

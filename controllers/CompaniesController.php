@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../models/InvoicesModel.php';
-require_once __DIR__ . '/../models/CompaniesModel.php';
-require_once __DIR__ . '/../models/ContactsModel.php';
+// require_once __DIR__ . '/../models/CompaniesModel.php';
+namespace Cogip\Controllers;
+
+use Cogip\Models\CompanyModel;
 
 class CompaniesController {
     private $model;

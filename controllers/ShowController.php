@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../models/ShowModel.php';
+// require_once __DIR__ . '/../models/ShowModel.php';
+
+namespace Cogip\Controllers;
+
+use Cogip\Models\ShowModel;
 
 class ShowController {
     private $model;

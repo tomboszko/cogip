@@ -4,8 +4,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../models/InvoicesModel.php';
-require_once __DIR__ . '/../models/Pagination.php';
+// require_once __DIR__ . '/../models/InvoicesModel.php';
+// require_once __DIR__ . '/../models/Pagination.php';
+
+namespace Cogip\Controllers;
+
+use Cogip\Models\InvoiceModel;
+use Cogip\Models\Pagination;
+
+
 
 class InvoicesController {
     private $model;

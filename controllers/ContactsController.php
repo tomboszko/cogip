@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../models/ContactsModel.php';
+// require_once __DIR__ . '/../models/ContactsModel.php';
+
+namespace Cogip\Controllers;
+
+use Cogip\Models\ContactModel;
 
 class ContactsController {
     private $model;
