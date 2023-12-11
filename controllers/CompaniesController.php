@@ -7,11 +7,11 @@ require_once __DIR__ . '/../models/ErrorModel.php';
 
 class CompaniesController {
     private $model;
-    private $db;
+    
 
     public function __construct($pdo) {
         $this->model = new CompanyModel($pdo);
-        $this->db = $pdo;
+        
     }
 
     public function getAllCompanies($currentPage) {
