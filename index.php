@@ -83,8 +83,13 @@ $companiesController = new CompaniesController($pdo);
 
 //all companies
 $router->get('/companies', function() use ($companiesController) {
-    $companiesController->getAllCompanies();
+    //retrieve the 'page' query parameter, defaulting to 1 if not present
+    //example : /companies?page=3  show only page 3
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    //call the controller method with the page number
+    $companiesController->getAllCompanies($page, 5);
 });
+
 //single company
 $router->get('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->getCompany($id);
@@ -115,20 +120,31 @@ $router->get('/companies/last', function() use ($companiesController) {
 $ContactsController = new ContactsController($pdo);
 
 // Define routes
+
+// Fetching all contacts with pagination
 $router->get('/contacts', function() use ($ContactsController) {
-    $ContactsController->getAllContacts();
+    // Retrieve the 'page' query parameter, defaulting to 1 if not present
+    // example : /contacts?page=3  show only page 3
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    // Call the controller method with the page number
+    $ContactsController->getAllContacts($page, 5);
 });
+
+// Fetching a single contact
 $router->get('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->getContact($id);
 });
+// Creating a contact
 $router->post('/contacts', function() use ($ContactsController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $ContactsController->createContact($data);
 });
+// Updating a contact
 $router->put('/contacts/(\d+)', function($id) use ($ContactsController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $ContactsController->updateContact($id, $data);
 });
+// Deleting a contact
 $router->delete('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->deleteContact($id);
 });
