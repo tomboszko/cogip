@@ -1,10 +1,11 @@
 <?php
 
 require 'vendor/autoload.php'; // Autoload dependencies
-
+//install whoops error handler
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
+
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'controllers/ContactsController.php'; //

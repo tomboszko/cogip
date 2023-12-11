@@ -23,8 +23,11 @@ class CompaniesController {
             $result = $this->model->getAllCompanies($pagination);
             // Set Content-Type header for JSON response
             header('Content-Type: application/json');
+            // Set the HTTP status code to 200 (OK)
+            http_response_code(200);
+
             // Return the companies and pagination info as JSON
-            echo json_encode($result, JSON_PRETTY_PRINT);
+            echo json_encode(['status' => 200, 'data' => $result], JSON_PRETTY_PRINT);
         } catch (Exception $e) {
             $errorModel = new ErrorModel();
             $errorModel->logError($e);
