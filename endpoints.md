@@ -1,3 +1,5 @@
+** This table will be updated... 
+
 | Endpoint | Method | Description |
 | --- | --- | --- |
 | /welcome | GET | Fetches the last companies, contacts, and invoices. |
