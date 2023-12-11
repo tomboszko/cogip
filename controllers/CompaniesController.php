@@ -17,6 +17,7 @@ class CompaniesController {
     public function getAllCompanies($currentPage) {
         $errorModel = new ErrorModel();
         try {
+            
             $itemsPerPage = 5; // Set items per page to 5
             // Initialize Pagination object with current page and items per page
             $pagination = new Pagination($itemsPerPage, $currentPage);
