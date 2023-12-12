@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require 'vendor/autoload.php'; // 
 
 //install whoops error handler
 $whoops = new \Whoops\Run;
@@ -16,7 +17,7 @@ header("Access-Control-Allow-Origin: http://localhost:5173");
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-require 'vendor/autoload.php'; // 
+
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'controllers/ContactsController.php'; //
