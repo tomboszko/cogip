@@ -1,7 +1,7 @@
 <?php
-//local connection//
-//require 'vendor/autoload.php';
 
+require 'vendor/autoload.php';
+//local connection//
 // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 // $dotenv->load();
 
