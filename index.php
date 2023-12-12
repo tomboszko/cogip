@@ -31,7 +31,6 @@ $router = new Router();
 // Instantiate the InvoicesController once
 $invoicesController = new InvoicesController($pdo);
 
-// Define routes 
 
 
 // Allow CORS
@@ -40,16 +39,30 @@ header("Access-Control-Allow-Origin: http://localhost:5173");
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+// Define routes 
+
 // Fetching a single invoice
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
 });
 
 
-// Fetching all invoices with pagination
 $router->get('/invoices', function() use ($invoicesController) {
+    // Retrieve the 'api_key' query parameter
+    $apiKey = isset($_GET['api_key']) ? $_GET['api_key'] : null;
+
+    // Get the stored API key
+    $storedApiKey = getenv('API_KEY');
+
+    // Check if the provided API key matches the stored API key
+    if ($apiKey !== $storedApiKey) {
+        // If not, return an error response
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid API key']);
+        return;
+    }
+
     // Retrieve the 'page' query parameter, defaulting to 1 if not present
-    // example : /invoices?page=3  show only page 3
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
     // Call the controller method with the page number
