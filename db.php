@@ -1,5 +1,5 @@
 <?php
-//local//
+//local connection//
 //require 'vendor/autoload.php';
 
 // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -11,7 +11,7 @@
 // $pass = $_ENV['DB_PASSWORD'];
 
 
-//heroku//
+//heroku///
 $host = getenv('DB_HOST');
 $db   = getenv('DB_DATABASE');
 $user = getenv('DB_USERNAME');
