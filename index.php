@@ -164,7 +164,6 @@ $ShowController = new ShowController($pdo);
 //     $ShowController->getCompanyInvoices($id);
 // });
 
-
 // Fetching all contacts for a company
 $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {
     $ShowController->getShowCompany($id);
