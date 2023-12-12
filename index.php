@@ -6,6 +6,12 @@ $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
+// Allow CORS
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 require 'vendor/autoload.php'; // 
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
@@ -18,11 +24,7 @@ use Bramus\Router\Router;
 
 $router = new Router();
 
-// Allow CORS
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 // Instantiate the welcome
 //$welcomeController = new WelcomeController($pdo);
