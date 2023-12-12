@@ -56,6 +56,7 @@ class CompanyModel {
         $query = "SELECT companies.*, types.name AS type_name 
           FROM companies 
           INNER JOIN types ON companies.type_id = types.id 
+          LEFT JOIN contacts ON companies£.id = contacts.company_id
           WHERE companies.id = :id";
 
         $stmt = $this->db->prepare($query);
