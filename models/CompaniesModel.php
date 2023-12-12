@@ -87,5 +87,12 @@ class CompanyModel {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->rowCount();
-    }        
+    }       
+    
+    public function getLastCompanies() {
+        $query = "SELECT * FROM companies ORDER BY id DESC LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -110,10 +110,10 @@ $router->delete('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->deleteCompany($id);
 });
 
-// //get last 2 companies
-// $router->get('/companies/last', function() use ($companiesController) {
-//     $companiesController->getLastCompanies();
-// });
+//get last 5 companies
+$router->get('/companies/last', function() use ($companiesController) {
+    $companiesController->getLastCompanies();
+});
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 

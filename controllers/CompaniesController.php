@@ -136,5 +136,20 @@ class CompaniesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
+
+    public function getLastCompanies() {
+        $errorModel = new ErrorModel(); // Instantiate the ErrorModel
+        try {
+            $result = $this->model->getLastCompanies();
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 200, 
+                'data' => $result], JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            // Use the ErrorModel to log the error and send an error response
+            $errorModel->logError($e);
+            $errorModel->sendErrorResponse($e);
+        }
+    }
 }
 
