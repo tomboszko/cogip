@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 //install whoops error handler
 $whoops = new \Whoops\Run;
@@ -39,6 +43,7 @@ $router = new Router();
 // Instantiate the InvoicesController once
 $invoicesController = new InvoicesController($pdo);
 // Define routes 
+
 // Fetching a single invoice
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
