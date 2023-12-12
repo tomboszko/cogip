@@ -90,4 +90,11 @@ class ContactModel {
         $stmt->execute();
         return $stmt->rowCount();
     }   
+
+    public function getLastContacts() {
+        $query = "SELECT * FROM contacts ORDER BY id DESC LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

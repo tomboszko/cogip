@@ -128,4 +128,18 @@ class ContactsController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
+
+    public function getLastContacts() {
+        $errorModel = new ErrorModel();
+        try {
+            $result = $this->model->getLastContacts();
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 200, 
+                'data' => $result], JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            $errorModel->logError($e);
+            $errorModel->sendErrorResponse($e);
+        }
+    }
 }

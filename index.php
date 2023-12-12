@@ -150,10 +150,10 @@ $router->delete('/contacts/(\d+)', function($id) use ($ContactsController) {
     $ContactsController->deleteContact($id);
 });
 
-// // Get the last 2 contacts
-// $router->get('/contacts/last', function() use ($ContactsController) {
-//     $ContactsController->getLastContacts();
-// });
+// Get the last 5 contacts
+$router->get('/contacts/last', function() use ($ContactsController) {
+    $ContactsController->getLastContacts();
+});
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
