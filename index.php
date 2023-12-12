@@ -19,14 +19,14 @@ use Bramus\Router\Router;
 $router = new Router();
 
 // Instantiate the welcome
-$welcomeController = new WelcomeController($pdo);
+//$welcomeController = new WelcomeController($pdo);
 
-// Define routes
-$router->get('/welcome', function() use ($welcomeController) {
-    $welcomeController->getLastCompanies();
-    $welcomeController->getLastContacts();
-    $welcomeController->getLastInvoices();
-});
+// // Define routes
+// $router->get('/welcome', function() use ($welcomeController) {
+//     $welcomeController->getLastCompanies();
+//     $welcomeController->getLastContacts();
+//     $welcomeController->getLastInvoices();
+// });
 
 // Instantiate the InvoicesController once
 $invoicesController = new InvoicesController($pdo);
@@ -70,10 +70,10 @@ $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->deleteInvoice($id);
 });
 
-// // Get the last 2 invoices
-// $router->get('/invoices/last', function() use ($invoicesController) {
-//     $invoicesController->getLastInvoices();
-// });
+// Get the last 5 invoices
+$router->get('/invoices/last', function() use ($invoicesController) {
+    $invoicesController->getLastInvoices();
+});
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 

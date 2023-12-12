@@ -132,4 +132,18 @@ class InvoicesController {
         }
     }
 
+    public function getLastInvoices() {
+        $errorModel = new ErrorModel();
+        try {
+            $result = $this->model->getLastInvoices();
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 200, 
+                'data' => $result], JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            $errorModel->logError($e);
+            $errorModel->sendErrorResponse($e);
+        }
+    }
+
 }

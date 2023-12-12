@@ -93,4 +93,14 @@ class InvoiceModel {
         $stmt->execute();
         return $stmt->rowCount();
     }
+
+    public function getLastInvoices() {
+        $query = "SELECT invoices.*, companies.name AS company_name 
+          FROM invoices 
+          INNER JOIN companies ON invoices.id_company = companies.id 
+          ORDER BY invoices.id DESC LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
