@@ -55,8 +55,8 @@ class InvoicesController {
                     'message' => 'Invoice not found']);
             }
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching the invoice']);
+            $errorModel->logError($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 
@@ -78,7 +78,7 @@ class InvoicesController {
                 'id' => $invoiceId]);
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendBadRequestResponse($e);
         }
     }
 
@@ -107,7 +107,7 @@ class InvoicesController {
             }
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 
@@ -128,7 +128,7 @@ class InvoicesController {
             }
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 

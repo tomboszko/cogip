@@ -34,6 +34,7 @@ class CompaniesController {
             
             $errorModel->logError($e);
             $errorModel->sendErrorResponse($e);
+            
         }
     }
 
@@ -57,7 +58,7 @@ class CompaniesController {
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 
@@ -80,7 +81,7 @@ class CompaniesController {
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendBadRequestResponse($e);
         }
     }
 
@@ -110,7 +111,7 @@ class CompaniesController {
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendBadRequestResponse($e);
         }
     }
 
@@ -132,7 +133,7 @@ class CompaniesController {
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 }

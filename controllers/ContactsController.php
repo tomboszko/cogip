@@ -52,7 +52,7 @@ class ContactsController {
             }
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
     
@@ -104,7 +104,7 @@ class ContactsController {
             }
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 
@@ -125,7 +125,7 @@ class ContactsController {
             }
         } catch (Exception $e) {
             $errorModel->logError($e);
-            $errorModel->sendErrorResponse($e);
+            $errorModel->sendNotFoundResponse($e);
         }
     }
 }

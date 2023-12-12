@@ -22,5 +22,13 @@ class ErrorModel {
         echo json_encode(['error' => '404 Not found']);
     }
 
+    public function sendBadRequestResponse() {
+        // Set the HTTP status code to 400 (Bad Request)
+        http_response_code(400);
+        
+        // Send an error message as a JSON response
+        echo json_encode(['error' => '400 Bad request']);
+    }
+
 }
 
