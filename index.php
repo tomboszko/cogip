@@ -43,6 +43,7 @@ $invoicesController = new InvoicesController($pdo);
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
 });
+
 // Fetching all invoices with pagination
 $router->get('/invoices', function() use ($invoicesController) {
     // Retrieve the 'page' query parameter, defaulting to 1 if not present
@@ -52,21 +53,25 @@ $router->get('/invoices', function() use ($invoicesController) {
     // Call the controller method with the page number
     $invoicesController->getAllInvoices($page, 5); 
 });
+
 // Creating an invoice
 $router->post('/invoices', function() use ($invoicesController) {
     // Assuming you're getting JSON input
     $data = json_decode(file_get_contents('php://input'), true);
     $invoicesController->createInvoice($data);
 });
+
 // Updating an invoice
 $router->put('/invoices/(\d+)', function($id) use ($invoicesController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $invoicesController->updateInvoice($id, $data);
 });
+
 // Deleting an invoice
 $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->deleteInvoice($id);
 });
+
 // Get the last 5 invoices
 $router->get('/invoices/last', function() use ($invoicesController) {
     $invoicesController->getLastInvoices();
