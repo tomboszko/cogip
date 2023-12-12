@@ -1,18 +1,18 @@
 <?php
 
-require 'vendor/autoload.php'; // Autoload dependencies
+
 //install whoops error handler
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
+require 'vendor/autoload.php'; // 
 require 'controllers/InvoicesController.php'; // 
 require 'controllers/CompaniesController.php'; // 
 require 'controllers/ContactsController.php'; //
 require 'controllers/WelcomeController.php'; //
 require 'controllers/ShowController.php'; //
-
-require 'db.php'; // Require database
+require 'db.php'; // 
 
 use Bramus\Router\Router;
 
@@ -36,16 +36,11 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 // Instantiate the InvoicesController once
 $invoicesController = new InvoicesController($pdo);
-
 // Define routes 
-
-
-
 // Fetching a single invoice
 $router->get('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->getInvoice($id);
 });
-
 // Fetching all invoices with pagination
 $router->get('/invoices', function() use ($invoicesController) {
     // Retrieve the 'page' query parameter, defaulting to 1 if not present
@@ -55,25 +50,21 @@ $router->get('/invoices', function() use ($invoicesController) {
     // Call the controller method with the page number
     $invoicesController->getAllInvoices($page, 5); 
 });
-
 // Creating an invoice
 $router->post('/invoices', function() use ($invoicesController) {
     // Assuming you're getting JSON input
     $data = json_decode(file_get_contents('php://input'), true);
     $invoicesController->createInvoice($data);
 });
-
 // Updating an invoice
 $router->put('/invoices/(\d+)', function($id) use ($invoicesController) {
     $data = json_decode(file_get_contents('php://input'), true);
     $invoicesController->updateInvoice($id, $data);
 });
-
 // Deleting an invoice
 $router->delete('/invoices/(\d+)', function($id) use ($invoicesController) {
     $invoicesController->deleteInvoice($id);
 });
-
 // Get the last 5 invoices
 $router->get('/invoices/last', function() use ($invoicesController) {
     $invoicesController->getLastInvoices();
@@ -83,9 +74,7 @@ $router->get('/invoices/last', function() use ($invoicesController) {
 
 // Instantiate the CompaniesController once
 $companiesController = new CompaniesController($pdo);
-
 // Define routes
-
 //all companies
 $router->get('/companies', function() use ($companiesController) {
     //retrieve the 'page' query parameter, defaulting to 1 if not present
