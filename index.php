@@ -101,6 +101,7 @@ $router->get('/companies', function() use ($companiesController) {
 $router->get('/companies/(\d+)', function($id) use ($companiesController) {
     $companiesController->getCompany($id);
 });
+
 //create company
 $router->post('/companies', function() use ($companiesController) {
     $data = json_decode(file_get_contents('php://input'), true);

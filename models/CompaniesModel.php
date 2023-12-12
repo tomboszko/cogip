@@ -16,8 +16,7 @@ class CompanyModel {
         FROM companies 
         INNER JOIN types ON companies.type_id = types.id
         LIMIT :limit OFFSET :offset";
-       
-
+       //
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -53,17 +52,40 @@ class CompanyModel {
 
 
     public function getCompanyById($id) {
+        // Fetch the company and its type
         $query = "SELECT companies.*, types.name AS type_name 
-          FROM companies 
-          INNER JOIN types ON companies.type_id = types.id 
-          LEFT JOIN contacts ON companies£.id = contacts.company_id
-          WHERE companies.id = :id";
-
+                  FROM companies 
+                  INNER JOIN types ON companies.type_id = types.id 
+                  WHERE companies.id = :id";
+        // prepare query statement
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $company = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$company) {
+                return null; 
+            }
+        // Fetch contacts for the company
+        $stmt = $this->db->prepare("SELECT * FROM contacts WHERE company_id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Fetch last 5 invoices for the company
+        $stmt = $this->db->prepare("SELECT * FROM invoices WHERE id_company = :id ORDER BY created_at DESC LIMIT 5");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Combine all data into a single array
+        $companyDetails = [
+            'company' => $company,
+            'contacts' => $contacts,
+            'invoices' => $invoices
+        ];
+        return $companyDetails;
     }
+    
+    
+
 
     public function createCompany($data) {
         $query = "INSERT INTO companies (company_name) VALUES (:company_name)";

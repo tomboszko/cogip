@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/InvoicesModel.php';
 require_once __DIR__ . '/../models/CompaniesModel.php';
 require_once __DIR__ . '/../models/ContactsModel.php';
+
 require_once __DIR__ . '/../models/ErrorModel.php';
 // 
 class CompaniesController {
@@ -42,13 +43,13 @@ class CompaniesController {
     public function getCompany($id) {
         $errorModel = new ErrorModel();
         try {
-            $company = $this->model->getCompanyById($id);
+            $companyDetails = $this->model->getCompanyById($id);
             header('Content-Type: application/json');
-            if ($company) {
+            if ($companyDetails) {
                 http_response_code(200);
                 echo json_encode([
                     'status' => 200, 
-                     'data' => $company], JSON_PRETTY_PRINT);
+                     'data' => $companyDetails], JSON_PRETTY_PRINT);
             } else {
                 http_response_code(404);
                 echo json_encode([
