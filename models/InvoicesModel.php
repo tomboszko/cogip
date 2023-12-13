@@ -68,23 +68,30 @@ class InvoiceModel {
     }
 
     public function createInvoice($data) {
-        $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date) VALUES (:ref, :id_company, NOW(), NOW())";
+        
+        $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date, price) 
+                  VALUES (:ref, :id_company, NOW(), NOW(), DATE_ADD(NOW(), INTERVAL 2 MONTH), :price)";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':ref', $data['ref']);
         $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+        // Bind price param
+        $stmt->bindParam(':price', $data['price']);
         $stmt->execute();
         return $this->db->lastInsertId();
     }
-
+    
+    
     public function updateInvoice($id, $data) {
-        $query = "UPDATE invoices SET ref = :ref, id_company = :id_company, updated_at, due_date = NOW() WHERE id = :id";
+        $query = "UPDATE invoices SET ref = :ref, id_company = :id_company, updated_at = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), price = :price WHERE id = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':ref', $data['ref']);
         $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+        $stmt->bindParam(':price', $data['price']);
         $stmt->execute();
         return $stmt->rowCount();
     }
+    
 
     public function deleteInvoice($id) {
         $query = "DELETE FROM invoices WHERE id = :id";
