@@ -179,6 +179,10 @@ $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {
 
 $router->get('/api/routes', function() {
     $routes = [
+        'Title' => 'cogip API',
+        'Description' => 'This is the API for the Cogip application',
+        'link' => 'https://cogip-api-8d6f281a9687.herokuapp.com/',
+        'Endpoint' => [
         'Invoices' => [
             ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
             ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
@@ -203,7 +207,9 @@ $router->get('/api/routes', function() {
             ['method' => 'DELETE', 'path' => '/contacts/{id}', 'description' => 'Delete a contact'],
             ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Get the last 5 contacts'],
         ]
-    ];
+    ]
+        ];
+
 
     header('Content-Type: application/json');
     echo json_encode($routes, JSON_PRETTY_PRINT);
