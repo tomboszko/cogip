@@ -179,19 +179,36 @@ $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {
 
 $router->get('/api/routes', function() {
     $routes = [
-        // List each route
-        ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
-        ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
-        ['method' => 'POST', 'path' => '/invoices', 'description' => 'Create a new invoice'],
-        ['method' => 'PUT', 'path' => '/invoices/{id}', 'description' => 'Update an existing invoice'],
-        ['method' => 'DELETE', 'path' => '/invoices/{id}', 'description' => 'Delete an invoice'],
-        ['method' => 'GET', 'path' => '/invoices/last', 'description' => 'Get the last 5 invoices'],
-        // Add more routes similarly
+        'Invoices' => [
+            ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
+            ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
+            ['method' => 'POST', 'path' => '/invoices', 'description' => 'Create a new invoice'],
+            ['method' => 'PUT', 'path' => '/invoices/{id}', 'description' => 'Update an existing invoice'],
+            ['method' => 'DELETE', 'path' => '/invoices/{id}', 'description' => 'Delete an invoice'],
+            ['method' => 'GET', 'path' => '/invoices/last', 'description' => 'Get the last 5 invoices'],
+        ],
+        'Companies' => [
+            ['method' => 'GET', 'path' => '/companies', 'description' => 'Fetch all companies with pagination'],
+            ['method' => 'GET', 'path' => '/companies/{id}', 'description' => 'Fetch a single company by ID'],
+            ['method' => 'POST', 'path' => '/companies', 'description' => 'Create a new company'],
+            ['method' => 'PUT', 'path' => '/companies/{id}', 'description' => 'Update an existing company'],
+            ['method' => 'DELETE', 'path' => '/companies/{id}', 'description' => 'Delete a company'],
+            ['method' => 'GET', 'path' => '/companies/last', 'description' => 'Get the last 5 companies'],
+        ],
+        'Contacts' => [
+            ['method' => 'GET', 'path' => '/contacts', 'description' => 'Fetch all contacts with pagination'],
+            ['method' => 'GET', 'path' => '/contacts/{id}', 'description' => 'Fetch a single contact by ID'],
+            ['method' => 'POST', 'path' => '/contacts', 'description' => 'Create a new contact'],
+            ['method' => 'PUT', 'path' => '/contacts/{id}', 'description' => 'Update an existing contact'],
+            ['method' => 'DELETE', 'path' => '/contacts/{id}', 'description' => 'Delete a contact'],
+            ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Get the last 5 contacts'],
+        ]
     ];
 
     header('Content-Type: application/json');
     echo json_encode($routes, JSON_PRETTY_PRINT);
 });
+
 
 
 
