@@ -183,6 +183,7 @@ $router->get('/api/routes', function() {
         'Description' => 'This is the API for the Cogip application',
         'link' => 'https://cogip-api-8d6f281a9687.herokuapp.com/',
         'Endpoint' => [
+            
         'Invoices' => [
             ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
             ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
