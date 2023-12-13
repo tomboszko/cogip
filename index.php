@@ -176,6 +176,27 @@ $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {
     $ShowController->getShowCompany($id);
 });
 
+
+$router->get('/api/routes', function() {
+    $routes = [
+        // List each route
+        ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
+        ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
+        ['method' => 'POST', 'path' => '/invoices', 'description' => 'Create a new invoice'],
+        ['method' => 'PUT', 'path' => '/invoices/{id}', 'description' => 'Update an existing invoice'],
+        ['method' => 'DELETE', 'path' => '/invoices/{id}', 'description' => 'Delete an invoice'],
+        ['method' => 'GET', 'path' => '/invoices/last', 'description' => 'Get the last 5 invoices'],
+        // Add more routes similarly
+    ];
+
+    header('Content-Type: application/json');
+    echo json_encode($routes, JSON_PRETTY_PRINT);
+});
+
+
+
+
+
 // Run the router
 $router->run();
 

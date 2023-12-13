@@ -7,13 +7,44 @@ class CompanyModel {
         $this->db = $database;
     }
 
-    public function getAllCompanies($pagination) {
-        $query = "SELECT * FROM companies LIMIT :limit OFFSET :offset";
+    public function getAllCompanies(Pagination $pagination) {
+        //calculating the offset
+        $offset = $pagination->getOffset();
+        $itemsPerPage = $pagination->getItemsPerPage();
+        //query to fetch companies with type names, ordered by company ID
+        $query = "SELECT companies.*, types.name AS type_name 
+                  FROM companies 
+                  INNER JOIN types ON companies.type_id = types.id 
+                  ORDER BY companies.id 
+                  LIMIT :limit OFFSET :offset";
+        //prepare and execute the query with bound parameters
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':limit', $pagination->getLimit(), PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $pagination->getOffset(), PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //fetching the companies data
+        $companiesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //query to count the total number of companies
+        $queryTotal = "SELECT COUNT(*) FROM companies";
+        $stmtTotal = $this->db->prepare($queryTotal);
+        $stmtTotal->execute();
+        $totalCompanies = $stmtTotal->fetchColumn();
+        //calculating the total number of pages
+        $totalPages = ceil($totalCompanies / $itemsPerPage);
+        //check if the current page is greater than the total number of pages
+        if ($pagination->getCurrentPage() > $totalPages) {
+            return ['message' => "Page doesn't exist"];
+        }
+        //returning the companies data along with pagination information
+        return [
+            'pagination' => [
+                'currentPage' => $pagination->getCurrentPage(),
+                'itemsPerPage' => $itemsPerPage,
+                'totalItems' => $totalCompanies,
+                'totalPages' => $totalPages
+            ],
+            'companies' => $companiesData
+        ];
     }
 
     public function getCompanyById($id) {
