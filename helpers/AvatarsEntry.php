@@ -1,11 +1,22 @@
 <?php
 
-require 'db.php'; 
+$host = getenv('DB_HOST');
+$db   = getenv('DB_DATABASE');
+$user = getenv('DB_USERNAME');
+$pass = getenv('DB_PASSWORD');
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$opt = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
 // Mapping of contact IDs to their image files
 $contactImages = [
-    5 => '',
+    5 => 'IMG/05.png',
     // 1 => '/path/to/image1.jpg',
     // 2 => '/path/to/image2.jpg',
     // ... more contacts
