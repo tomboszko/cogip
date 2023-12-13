@@ -7,49 +7,14 @@ class CompanyModel {
         $this->db = $database;
     }
 
-    public function getAllCompanies(Pagination $pagination) {
-        // Calculating the offset for SQL query based on the current page and items per page
-        $offset = $pagination->getOffset();
-        $itemsPerPage = $pagination->getItemsPerPage();
-        
-        $query = "SELECT companies.*, types.name AS type_name 
-        FROM companies 
-        INNER JOIN types ON companies.type_id = types.id
-        LIMIT :limit OFFSET :offset";
-       //
+    public function getAllCompanies($pagination) {
+        $query = "SELECT * FROM companies LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':limit', $itemsPerPage, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $pagination->getLimit(), PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $pagination->getOffset(), PDO::PARAM_INT);
         $stmt->execute();
-        // Fetching the companies data
-        $companiesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // Query to count the total number of companies
-        $queryTotal = "SELECT COUNT(*) FROM companies";
-        $stmtTotal = $this->db->prepare($queryTotal);
-        $stmtTotal->execute();
-        $totalCompanies = $stmtTotal->fetchColumn();
-
-        // Calculating the total number of pages
-        $totalPages = ceil($totalCompanies / $itemsPerPage);
-
-        // Check if the current page is greater than the total number of pages
-        if ($pagination->getCurrentPage() > $totalPages) {
-            return ['message' => "Page doesn't exist"];
-        }
-
-        // Returning the companies data along with pagination information
-        return [
-            'pagination' => [
-                'currentPage' => $pagination->getCurrentPage(),
-                'itemsPerPage' => $itemsPerPage,
-                'totalItems' => $totalCompanies,
-                'totalPages' => $totalPages
-            ],
-            'companies' => $companiesData
-        ];
-        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
     public function getCompanyById($id) {
         // Fetch the company and its type
@@ -62,30 +27,11 @@ class CompanyModel {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $company = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$company) {
-                return null; 
-            }
-        // Fetch contacts for the company
-        $stmt = $this->db->prepare("SELECT * FROM contacts WHERE company_id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // Fetch last 5 invoices for the company
-        $stmt = $this->db->prepare("SELECT * FROM invoices WHERE id_company = :id ORDER BY created_at DESC LIMIT 5");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // Combine all data into a single array
-        $companyDetails = [
-            'company' => $company,
-            'contacts' => $contacts,
-            'invoices' => $invoices
-        ];
-        return $companyDetails;
+        if (!$company) {
+            return null; 
+        }
+        return $company;
     }
-    
-    
-
 
     public function createCompany($data) {
         $query = "INSERT INTO companies (company_name) VALUES (:company_name)";
