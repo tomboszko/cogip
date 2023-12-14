@@ -65,14 +65,7 @@ class InvoiceModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Create a new invoice 
-     *
-     * @param array $data An array containing the invoice data. Must include 'ref', 'id_company', and 'price'.
-     * @return int The ID of the newly created invoice.
-     * @throws InvalidArgumentException If a required key is missing from $data.
-     * @throws PDOException If an error occurs while executing the SQL statement.
-     */
+    
     public function createInvoice($data) {
         // Validate input
         if (!isset($data['id_company']) || !is_numeric($data['id_company']) || intval($data['id_company']) != $data['id_company']) {
@@ -109,41 +102,48 @@ class InvoiceModel {
         // Return the ID of the newly created invoice
         return $this->db->lastInsertId();
     }
-    
-    
-    public function updateInvoice($id, $data) {
-        // Validate input
-        foreach (['ref', 'id_company', 'price'] as $key) {
-            if (!isset($data[$key])) {
-                throw new InvalidArgumentException("Missing required key in data: $key");
-            }
-        }
-        // Prepare SQL statement
-        $query = "
-            UPDATE invoices 
-            SET ref = :ref, 
-                id_company = :id_company, 
-                updated_at = NOW(), 
-                due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
-                price = :price 
-            WHERE id = :id
-        ";
-        $stmt = $this->db->prepare($query);
 
-        // Bind parameters and execute statement
-        try {
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':ref', $data['ref']);
-            $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-            $stmt->bindParam(':price', $data['price']);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            // Handle exception 
-            throw new Exception("Database error: " . $e->getMessage());
+
+    public function updateInvoice($id, $data) {
+    // Validate input
+    foreach (['ref', 'id_company', 'price'] as $key) {
+        if (!isset($data[$key])) {
+            throw new InvalidArgumentException("Missing required key in data: $key");
         }
-        // Return the number of affected rows
-        return $stmt->rowCount();
     }
+    // Additional type/format validations
+    if (!is_int($data['id_company']) && !ctype_digit($data['id_company'])) {
+        throw new InvalidArgumentException("Invalid format for id_company: must be an integer");
+    }
+    if (!is_numeric($data['price'])) {
+        throw new InvalidArgumentException("Invalid format for price: must be numeric");
+    }
+    // Prepare SQL statement
+    $query = "
+        UPDATE invoices 
+        SET ref = :ref, 
+            id_company = :id_company, 
+            updated_at = NOW(), 
+            due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
+            price = :price 
+        WHERE id = :id
+    ";
+    $stmt = $this->db->prepare($query);
+    // Bind parameters and execute statement
+    try {
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':ref', $data['ref']);
+        $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+        $stmt->bindParam(':price', $data['price'], PDO::PARAM_STR); // Bind as string if decimal
+        $stmt->execute();
+    } catch (PDOException $e) {
+        // Handle exception 
+        throw new Exception("Database error: " . $e->getMessage());
+    }
+    // Return the number of affected rows
+    return $stmt->rowCount();
+}
+
     
 
     public function deleteInvoice($id) {
