@@ -75,11 +75,11 @@ class InvoiceModel {
      */
     public function createInvoice($data) {
         // Validate input
-        foreach (['ref', 'id_company', 'price'] as $key) {
-            if (!isset($data[$key])) {
-                throw new InvalidArgumentException("Missing required key in data: $key");
-            }
-        }
+        // foreach (['ref', 'id_company', 'price'] as $key) {
+        //     if (!isset($data[$key])) {
+        //         throw new InvalidArgumentException("Missing required key in data: $key");
+        //     }
+        // }
         // Prepare SQL statement
         $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date, price) 
                   VALUES (:ref, :id_company, NOW(), NOW(), DATE_ADD(NOW(), INTERVAL 2 MONTH), :price)";
