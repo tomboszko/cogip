@@ -105,7 +105,13 @@ class CompanyModel {
     }       
     
     public function getLastCompanies() {
-        $query = "SELECT * FROM companies ORDER BY id DESC LIMIT 5";
+        $query = "
+            SELECT companies.*, company_types.name AS type_name 
+            FROM companies 
+            INNER JOIN company_types ON companies.type_id = company_types.id 
+            ORDER BY companies.id DESC 
+            LIMIT 5
+        ";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
