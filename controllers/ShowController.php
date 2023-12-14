@@ -1,39 +1,39 @@
 <?php
 
-require_once __DIR__ . '/../models/ShowModel.php';
+namespace App\Controllers;
 
-class ShowController {
-    private $model;
+use App\Core\Controller;
+use App\Model\CompaniesModel;
+use App\Model\InvoicesModel;
+use App\Model\ContactsModel;
+use PDO;
 
-    public function __construct($pdo) {
-        $this->model = new ShowModel($pdo);
+
+class ShowController extends Controller
+{
+    private $companiesModel;
+    private $invoicesModel;
+    private $contactsModel;
+
+    public function __construct()
+    {
+        $this->companiesModel = new CompaniesModel;
+        $this->invoicesModel = new InvoicesModel;
+        $this->contactsModel = new ContactsModel;
     }
-// Get all invoices for a company
-    public function getCompanyInvoices($id) {
-
-            $invoices = $this->model->getCompanyInvoices($id);
-            $invoices = array('Company invoices' => $invoices); // Wrap the invoices array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($invoices, JSON_PRETTY_PRINT);
-
+    
+    public function getCompanyById($id)
+    {
+        $this->companiesModel->getCompanyById($id);
     }
 
-    // Get all Contacts for a company
-    public function getCompanyContacts($id) {
-
-            $contacts = $this->model->getCompanyContacts($id);
-            $contacts = array('Company contacts' => $contacts); // Wrap the Contacts array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($contacts, JSON_PRETTY_PRINT);
+    public function getCompanyInvoices()
+    {
+        $this->invoicesModel->getCompanyInvoices();
     }
 
-    public function getshowCompany($id) {
-
-        $invoices = $this->model->getCompanyInvoices($id);
-        $contacts = $this->model->getCompanyContacts($id);
-        $companies = $this->model->getShowCompanyById($id);
-        $company = array('Companies' => $companies, 'Invoices' => $invoices, 'Contacts' => $contacts); // Wrap the invoices array inside another array
-        header('Content-Type: application/json');
-        echo json_encode($company, JSON_PRETTY_PRINT);
+    public function getCompanyContacts()
+    {
+        $this->contactsModel->getCompanyContacts();
     }
 }

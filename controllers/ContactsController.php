@@ -1,98 +1,66 @@
 <?php
 
-require_once __DIR__ . '/../models/ContactsModel.php';
+namespace App\Controllers;
 
-class ContactsController {
-    private $model;
+use App\Core\Controller;
+use App\Model\ContactsModel;
+use App\Utilities\Pagination;
+use Exception;
 
-    public function __construct($pdo) {
-        $this->model = new ContactModel($pdo);
+class ContactsController extends Controller
+{
+    private $contactsModel;
+
+    public function __construct()
+    {
+        $this->contactsModel = new ContactsModel();
     }
 
-    public function getAllContacts() {
+    public function getAllContacts()
+    {
         try {
-            $contacts = $this->model->getAllContacts();
-            $contacts = array('contacts' => $contacts); // Wrap the contacts array inside another array
+            // Récupérez les paramètres de pagination depuis l'URL
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $perPage = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 10;
+
+            // Créez une instance de Pagination
+            $pagination = new Pagination($perPage, $page);
+
+            // Utilisez le modèle pour récupérer tous les contacts paginés
+            $results = $this->contactsModel->getAllContacts($pagination);
+
+            // Envoyez les résultats au format JSON
             header('Content-Type: application/json');
-            echo json_encode($contacts, JSON_PRETTY_PRINT);
+            echo json_encode($results, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching contacts'], JSON_PRETTY_PRINT);
+            // Gérez les erreurs ici
+            http_response_code(500); // Code d'erreur interne du serveur
+            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 
-    public function getContact($id) {
-        try {
-            $contact = $this->model->getContactById($id); // Correction ici
-            header('Content-Type: application/json');
-            if ($contact) { // Correction ici
-                echo json_encode($contact); // Correction ici
-            } else {
-                http_response_code(404);
-                echo json_encode(['message' => 'Contact not found']);
-            }
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching the Contact']);
-        }
-    }
-    
-
-    public function createContact($data) {
-        try {
-            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
-                http_response_code(400);
-                echo json_encode(['message' => 'contact_name']);
-                return;
-            }
-
-            $ContactId = $this->model->createContacts($data);
-            header('Content-Type: application/json');
-            http_response_code(201);
-            echo json_encode(['message' => 'Contact created', 'id' => $ContactId]);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while creating the Contact']);
-        }
+    public function getContactById($id)
+    {
+        $this->contactsModel->getContactById($id);
     }
 
-    public function updateContact($id, $data) {
-        try {
-            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
-                http_response_code(400);
-                echo json_encode(['message' => 'Invalid contact_name']);
-                return;
-            }
-
-            $result = $this->model->updateContact($id, $data);
-            header('Content-Type: application/json');
-            if ($result) {
-                echo json_encode(['message' => 'Contact updated']);
-            } else {
-                http_response_code(404);
-                echo json_encode(['message' => 'Contact not found or no changes made']);
-            }
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while updating the Contact']);
-        }
+    public function getFirstFiveContacts()
+    {
+        $this->contactsModel->getFirstFiveContacts();
     }
 
-    public function deleteContact($id) {
-        try {
-            $result = $this->model->deleteContact($id);
-            header('Content-Type: application/json');
-            if ($result) {
-                echo json_encode(['message' => 'Contact deleted']);
-            } else {
-                http_response_code(404);
-                echo json_encode(['message' => 'Contact not found']);
-            }
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while deleting the Contact']);
-        }
+    public function createContact($data)
+    {
+        $this->contactsModel->createContact($data);
     }
 
+    public function updateContact($data)
+    {
+        $this->contactsModel->updateContact($data);
+    }
 
+    public function deleteContact($id)
+    {
+        $this->contactsModel->deleteContact($id);
+    }
 }

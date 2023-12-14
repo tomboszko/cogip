@@ -1,52 +1,40 @@
 <?php
 
-require_once __DIR__ . '/../models/InvoicesModel.php';
-require_once __DIR__ . '/../models/CompaniesModel.php';
-require_once __DIR__ . '/../models/ContactsModel.php';
-require_once __DIR__ . '/../models/WelcomeModel.php';
+namespace App\Controllers;
 
-class WelcomeController {
-    private $model;
+use App\Core\Controller;
+use App\Controllers\CompaniesController;
+use App\Controllers\InvoicesController;
+use App\Controllers\ContactsController;
+use PDO;
 
-    public function __construct($pdo) {
-        $this->model = new WelcomeModel($pdo);
+
+class WelcomeController extends Controller
+
+{
+    private $companiesModel;
+    private $invoicesModel;
+    private $contactsModel;
+
+    public function __construct()
+    {
+        $this->companiesModel = new CompaniesController;
+        $this->invoicesModel = new InvoicesController;
+        $this->contactsModel = new ContactsController;
     }
 
-
-public function getLastCompanies() {
-        try {
-            $companies = $this->model->getLastCompanies();
-            $companies = array('Last companies' => $companies); // Wrap the companies array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($companies, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching companies'], JSON_PRETTY_PRINT);
-        }
+    public function getFirstFiveCompanies()
+    {
+        $this->companiesModel->getFirstFiveCompanies();
     }
 
-    public function getLastContacts() {
-        try {
-            $contacts = $this->model->getLastContacts();
-            $contacts = array('Last contacts' => $contacts); // Wrap the contacts array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($contacts, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching contacts'], JSON_PRETTY_PRINT);
-        }
+    public function getFirstFiveInvoices()
+    {
+        $this->invoicesModel->getFirstFiveInvoices();
     }
 
-    // Get the last 2 invoices
-    public function getLastInvoices() {
-        try {
-            $invoices = $this->model->getLastInvoices();
-            $invoices = array('last invoices' => $invoices); // Wrap the invoices array inside another array
-            header('Content-Type: application/json');
-            echo json_encode($invoices, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => 'An error occurred while fetching invoices'], JSON_PRETTY_PRINT);
-        }
+    public function getFirstFiveContacts()
+    {
+        $this->contactsModel->getFirstFiveContacts();
     }
 }
