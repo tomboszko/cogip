@@ -1,10 +1,11 @@
 <?php
 // allow CORS
 header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: application/json, Authorization');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
+header('Access-Control-Allow-Headers: Content-type, Authorization');
 header('HTTP/1.1 200 OK');
 header('Content-Type: application/json');
+
 
 //install whoops error handler
 $whoops = new \Whoops\Run;
