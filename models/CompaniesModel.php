@@ -65,11 +65,26 @@ class CompanyModel {
     }
 
     public function createCompany($data) {
-        $query = "INSERT INTO companies (company_name) VALUES (:company_name)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':company_name', $data['company_name']);
-        $stmt->execute();
-        return $this->db->lastInsertId();
+        try {
+            $this->db->beginTransaction();
+            $query = "INSERT INTO companies (company_name, type_id) VALUES (:company_name, :type_id)";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':company_name', $data['company_name']);
+            $stmt->bindParam(':type_id', $data['type_id']);
+            $stmt->execute();
+            $companyId = $this->db->lastInsertId();
+            $query = "INSERT INTO company_addresses (company_id, address_id) VALUES (:company_id, :address_id)";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':company_id', $companyId);
+            $stmt->bindParam(':address_id', $data['address_id']);
+            $stmt->execute();
+            $this->db->commit();
+            return $companyId;
+            
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return null;
+        }
     }
 
     public function updateCompany($id, $data) {

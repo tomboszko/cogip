@@ -66,19 +66,38 @@ class InvoiceModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Create a new invoice.
+     *
+     * @param array $data An array containing the invoice data. Must include 'ref', 'id_company', and 'price'.
+     * @return int The ID of the newly created invoice.
+     * @throws InvalidArgumentException If a required key is missing from $data.
+     * @throws PDOException If an error occurs while executing the SQL statement.
+     */
     public function createInvoice($data) {
-        
+        // Validate input
+        foreach (['ref', 'id_company', 'price'] as $key) {
+            if (!isset($data[$key])) {
+                throw new InvalidArgumentException("Missing required key in data: $key");
+            }
+        }
+        // Prepare SQL statement
         $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date, price) 
                   VALUES (:ref, :id_company, NOW(), NOW(), DATE_ADD(NOW(), INTERVAL 2 MONTH), :price)";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':ref', $data['ref']);
-        $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $data['price']);
-        $stmt->execute();
+        // Bind parameters and execute statement
+        try {
+            $stmt->bindParam(':ref', $data['ref']);
+            $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+            $stmt->bindParam(':price', $data['price']);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            // Handle exception 
+            throw $e;
+        }
+        // Return the ID of the newly created invoice
         return $this->db->lastInsertId();
     }
-    
-    
     public function updateInvoice($id, $data) {
         $query = "UPDATE invoices SET ref = :ref, id_company = :id_company, updated_at = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), price = :price WHERE id = :id";
         $stmt = $this->db->prepare($query);
