@@ -75,11 +75,23 @@ class InvoiceModel {
      */
     public function createInvoice($data) {
         // Validate input
-        // foreach (['ref', 'id_company', 'price'] as $key) {
-        //     if (!isset($data[$key])) {
-        //         throw new InvalidArgumentException("Missing required key in data: $key");
-        //     }
-        // }
+        if (!isset($data['id_company']) || !is_numeric($data['id_company']) || intval($data['id_company']) != $data['id_company']) {
+            throw new InvalidArgumentException("Invalid or missing id_company: must be an integer");
+        }
+        if (!isset($data['price']) || !is_numeric($data['price'])) {
+            throw new InvalidArgumentException("Invalid or missing price: must be numeric");
+        }
+        // Check if ref is provided and validate
+        if (isset($data['ref'])) {
+            if (!is_string($data['ref'])) {
+                throw new InvalidArgumentException("Invalid format for ref: must be a string");
+            }
+            if (strlen($data['ref']) > 50) {
+                throw new InvalidArgumentException("Invalid length for ref: must be 50 characters or less");
+            }
+        } else {
+            $data['ref'] = null; // Set default value if ref is not provided
+        }
         // Prepare SQL statement
         $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date, price) 
                   VALUES (:ref, :id_company, NOW(), NOW(), DATE_ADD(NOW(), INTERVAL 2 MONTH), :price)";
@@ -91,12 +103,13 @@ class InvoiceModel {
             $stmt->bindParam(':price', $data['price']);
             $stmt->execute();
         } catch (PDOException $e) {
-            // Handle exception 
+            // Handle exception
             throw $e;
         }
         // Return the ID of the newly created invoice
         return $this->db->lastInsertId();
     }
+    
     
     public function updateInvoice($id, $data) {
         // Validate input
