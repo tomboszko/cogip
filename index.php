@@ -5,9 +5,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: application/json, Authorization');
 header('HTTP/1.1 200 OK');
 header('Content-Type: application/json');
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
 
 //install whoops error handler
 $whoops = new \Whoops\Run;
