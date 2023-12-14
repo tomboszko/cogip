@@ -69,13 +69,7 @@ class InvoicesController {
     public function updateInvoice($id, $data) {
         $errorModel = new ErrorModel();
         try {
-            if (!isset($data['invoice_number']) || !is_string($data['invoice_number'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'status' => 400,
-                    'message' => 'Invalid invoice_number']);
-                return;
-            }
+            
             $result = $this->model->updateInvoice($id, $data);
             header('Content-Type: application/json');
             if ($result) {
