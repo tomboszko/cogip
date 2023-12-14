@@ -108,7 +108,7 @@ class CompanyModel {
         $query = "
             SELECT companies.*, types.name AS type_name 
             FROM companies 
-            INNER JOIN types ON companies.type_id = company_types.id 
+            INNER JOIN types ON companies.type_id = types.id 
             ORDER BY companies.id DESC 
             LIMIT 5
         ";
@@ -116,4 +116,6 @@ class CompanyModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    
 }
