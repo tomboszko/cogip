@@ -67,7 +67,7 @@ class InvoiceModel {
     }
 
     /**
-     * Create a new invoice.
+     * Create a new invoice 
      *
      * @param array $data An array containing the invoice data. Must include 'ref', 'id_company', and 'price'.
      * @return int The ID of the newly created invoice.
