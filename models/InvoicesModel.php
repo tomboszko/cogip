@@ -53,8 +53,7 @@ class InvoiceModel {
             'invoices' => $invoicesData
         ];
     }
-
-
+    
     public function getInvoiceById($id) {
         $query = "SELECT invoices.*, companies.name AS company_name 
           FROM invoices 
@@ -98,6 +97,8 @@ class InvoiceModel {
         // Return the ID of the newly created invoice
         return $this->db->lastInsertId();
     }
+
+
     public function updateInvoice($id, $data) {
         $query = "UPDATE invoices SET ref = :ref, id_company = :id_company, updated_at = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), price = :price WHERE id = :id";
         $stmt = $this->db->prepare($query);

@@ -53,11 +53,7 @@ class InvoicesController {
     public function createInvoice($data) {
         $errorModel = new ErrorModel();
         try {
-            if (!isset($data['invoice_number']) || !is_string($data['invoice_number'])) {
-                http_response_code(400);
-                echo json_encode(['message' => 'Invalid invoice_number']);
-                return;
-            }
+            
             $invoiceId = $this->model->createInvoice($data);
             header('Content-Type: application/json');
             http_response_code(201);
