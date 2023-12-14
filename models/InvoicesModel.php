@@ -142,12 +142,12 @@ class InvoiceModel {
     }
 
     public function getLastInvoices() {
-        $query = "SELECT invoices.*, companies.name AS company_name 
-          FROM invoices 
-          INNER JOIN companies ON invoices.id_company = companies_id 
-          ORDER BY invoices.id DESC LIMIT 5";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $query = "SELECT invoices.*, companies.name AS company_name, invoices.id_company AS company_id 
+                FROM invoices 
+                INNER JOIN companies ON invoices.id_company = companies.id 
+                ORDER BY invoices.id DESC LIMIT 5";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
