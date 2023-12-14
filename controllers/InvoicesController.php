@@ -1,20 +1,13 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once __DIR__ . '/../models/InvoicesModel.php';
 require_once __DIR__ . '/../models/Pagination.php';
 require_once __DIR__ . '/../models/ErrorModel.php';
 
 class InvoicesController {
     private $model;
-
     public function __construct($pdo) {
         $this->model = new InvoiceModel($pdo);
     }
-
     public function getAllInvoices($currentPage) {
         $errorModel = new ErrorModel();
         try {
@@ -35,8 +28,6 @@ class InvoicesController {
             $errorModel->sendErrorResponse($e);
         }
     }
-    
-
     public function getInvoice($id) {
         $errorModel = new ErrorModel();
         try {
@@ -59,7 +50,6 @@ class InvoicesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function createInvoice($data) {
         $errorModel = new ErrorModel();
         try {
@@ -68,7 +58,6 @@ class InvoicesController {
                 echo json_encode(['message' => 'Invalid invoice_number']);
                 return;
             }
-
             $invoiceId = $this->model->createInvoice($data);
             header('Content-Type: application/json');
             http_response_code(201);
@@ -81,7 +70,6 @@ class InvoicesController {
             $errorModel->sendBadRequestResponse($e);
         }
     }
-
     public function updateInvoice($id, $data) {
         $errorModel = new ErrorModel();
         try {
@@ -92,7 +80,6 @@ class InvoicesController {
                     'message' => 'Invalid invoice_number']);
                 return;
             }
-
             $result = $this->model->updateInvoice($id, $data);
             header('Content-Type: application/json');
             if ($result) {
@@ -110,7 +97,6 @@ class InvoicesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function deleteInvoice($id) {
         $errorModel = new ErrorModel();
         try {
@@ -131,7 +117,6 @@ class InvoicesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function getLastInvoices() {
         $errorModel = new ErrorModel();
         try {
@@ -145,5 +130,4 @@ class InvoicesController {
             $errorModel->sendErrorResponse($e);
         }
     }
-
 }

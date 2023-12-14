@@ -1,17 +1,13 @@
 <?php
-
 require_once __DIR__ . '/../models/ContactsModel.php';
 require_once __DIR__ . '/../models/ErrorModel.php';
 
 class ContactsController {
     private $model;
-    
 
     public function __construct($pdo) {
         $this->model = new ContactModel($pdo);
-        
     }
-
     public function getAllContacts($currentPage) {
             $errorModel = new ErrorModel();
         try {
@@ -32,10 +28,6 @@ class ContactsController {
             $errorModel->sendErrorResponse($e);
         }
     }
-
-
-
-
     // fetch a single contact by id
     public function getContact($id) {
         $errorModel = new ErrorModel();
@@ -55,7 +47,6 @@ class ContactsController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-    
     public function createContact($data) {
         $errorModel = new ErrorModel();
         try {
@@ -64,7 +55,6 @@ class ContactsController {
                 echo json_encode(['message' => 'contact_name']);
                 return;
             }
-
             $ContactId = $this->model->createContacts($data);
             header('Content-Type: application/json');
             http_response_code(201);
@@ -78,7 +68,6 @@ class ContactsController {
 
         }
     }
-
     public function updateContact($id, $data) {
         $errorModel = new ErrorModel();
         try {
@@ -89,7 +78,6 @@ class ContactsController {
                     'message' => 'Invalid contact_name']);
                 return;
             }
-
             $result = $this->model->updateContact($id, $data);
             header('Content-Type: application/json');
             if ($result) {
@@ -107,7 +95,6 @@ class ContactsController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function deleteContact($id) {
         $errorModel = new ErrorModel();
         try {
@@ -128,7 +115,6 @@ class ContactsController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function getLastContacts() {
         $errorModel = new ErrorModel();
         try {

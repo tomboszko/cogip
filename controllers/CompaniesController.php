@@ -1,22 +1,18 @@
 <?php
-
 require_once __DIR__ . '/../models/InvoicesModel.php';
 require_once __DIR__ . '/../models/CompaniesModel.php';
 require_once __DIR__ . '/../models/ContactsModel.php';
-
 require_once __DIR__ . '/../models/ErrorModel.php';
-// 
+
 class CompaniesController {
     private $model;
-    
+
     public function __construct($pdo) {
         $this->model = new CompanyModel($pdo);
     }
-
     public function getAllCompanies($currentPage) {
         $errorModel = new ErrorModel();
         try {
-            
             $itemsPerPage = 5; // Set items per page to 5
             // Initialize Pagination object with current page and items per page
             $pagination = new Pagination($itemsPerPage, $currentPage);
@@ -26,20 +22,15 @@ class CompaniesController {
             header('Content-Type: application/json');
             // Set the HTTP status code to 200 (OK)
             http_response_code(200);
-
             // Return the companies and pagination info as JSON
             echo json_encode([
                 'status' => 200, 
                 'data' => $result], JSON_PRETTY_PRINT);
         } catch (Exception $e) {
-            
             $errorModel->logError($e);
             $errorModel->sendErrorResponse($e);
-            
         }
     }
-
-
     public function getCompany($id) {
         $errorModel = new ErrorModel();
         try {
@@ -62,7 +53,6 @@ class CompaniesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function createCompany($data) {
        $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
@@ -71,7 +61,6 @@ class CompaniesController {
                 echo json_encode(['message' => 'Invalid name']);
                 return;
             }
-
             $companyId = $this->model->createCompany($data);
             header('Content-Type: application/json');
             http_response_code(201);
@@ -85,7 +74,6 @@ class CompaniesController {
             $errorModel->sendBadRequestResponse($e);
         }
     }
-
     public function updateCompany($id, $data) {
         $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
@@ -96,7 +84,6 @@ class CompaniesController {
                     'message' => 'Invalid company_name']);
                 return;
             }
-
             $result = $this->model->updateCompany($id, $data);
             header('Content-Type: application/json');
             if ($result) {
@@ -110,12 +97,10 @@ class CompaniesController {
                     'message' => 'Company not found or no changes made']);
             }
         } catch (Exception $e) {
-            // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
             $errorModel->sendBadRequestResponse($e);
         }
     }
-
     public function deleteCompany($id) {
         $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
@@ -137,7 +122,6 @@ class CompaniesController {
             $errorModel->sendNotFoundResponse($e);
         }
     }
-
     public function getLastCompanies() {
         $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
@@ -153,4 +137,3 @@ class CompaniesController {
         }
     }
 }
-

@@ -55,7 +55,6 @@ class InvoiceModel {
     }
 
 
-    
     public function getInvoiceById($id) {
         $query = "SELECT invoices.*, companies.name AS company_name 
           FROM invoices 
@@ -74,7 +73,6 @@ class InvoiceModel {
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':ref', $data['ref']);
         $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-        // Bind price param
         $stmt->bindParam(':price', $data['price']);
         $stmt->execute();
         return $this->db->lastInsertId();
