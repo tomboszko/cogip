@@ -106,7 +106,7 @@ class CompanyModel {
     
     public function getLastCompanies() {
         $query = "
-            SELECT companies.*, company_types.name AS type_name 
+            SELECT companies.*, types.name AS type_name 
             FROM companies 
             INNER JOIN company_types ON companies.type_id = company_types.id 
             ORDER BY companies.id DESC 
