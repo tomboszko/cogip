@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // allow CORS
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
@@ -13,12 +17,12 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
   
 require 'vendor/autoload.php';
-require 'controllers/InvoicesController.php'; // 
-require 'controllers/CompaniesController.php'; // 
-require 'controllers/ContactsController.php'; //
-require 'controllers/WelcomeController.php'; //
-require 'controllers/ShowController.php'; //
-require 'db.php'; // 
+require 'controllers/InvoicesController.php'; 
+require 'controllers/CompaniesController.php'; 
+require 'controllers/ContactsController.php';
+require 'controllers/WelcomeController.php';
+require 'controllers/ShowController.php'; 
+require 'db.php'; 
 
 use Bramus\Router\Router;
 
