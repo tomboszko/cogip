@@ -53,7 +53,6 @@ class InvoicesController {
     public function createInvoice($data) {
         $errorModel = new ErrorModel();
         try {
-            
             $invoiceId = $this->model->createInvoice($data);
             header('Content-Type: application/json');
             http_response_code(201);
