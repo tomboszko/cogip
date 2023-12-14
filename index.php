@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require 'vendor/autoload.php';
+
 // allow CORS
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
@@ -10,13 +12,11 @@ header('Access-Control-Allow-Headers: Content-type, Authorization');
 header('HTTP/1.1 200 OK');
 header('Content-Type: application/json');
 
-
 //install whoops error handler
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
-  
-require 'vendor/autoload.php';
+
 require 'controllers/InvoicesController.php'; 
 require 'controllers/CompaniesController.php'; 
 require 'controllers/ContactsController.php';
