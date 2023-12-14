@@ -92,9 +92,16 @@ class ContactModel {
     }   
 
     public function getLastContacts() {
-        $query = "SELECT * FROM contacts ORDER BY id DESC LIMIT 5";
+        $query = "
+            SELECT contacts.*, companies.name AS company_name 
+            FROM contacts 
+            INNER JOIN companies ON contacts.company_id = companies.id 
+            ORDER BY contacts.id DESC 
+            LIMIT 5
+        ";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }
