@@ -53,7 +53,7 @@ class InvoiceModel {
             'invoices' => $invoicesData
         ];
     }
-    
+
     public function getInvoiceById($id) {
         $query = "SELECT invoices.*, companies.name AS company_name 
           FROM invoices 
@@ -97,16 +97,38 @@ class InvoiceModel {
         // Return the ID of the newly created invoice
         return $this->db->lastInsertId();
     }
-
-
+    
     public function updateInvoice($id, $data) {
-        $query = "UPDATE invoices SET ref = :ref, id_company = :id_company, updated_at = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), price = :price WHERE id = :id";
+        // Validate input
+        foreach (['ref', 'id_company', 'price'] as $key) {
+            if (!isset($data[$key])) {
+                throw new InvalidArgumentException("Missing required key in data: $key");
+            }
+        }
+        // Prepare SQL statement
+        $query = "
+            UPDATE invoices 
+            SET ref = :ref, 
+                id_company = :id_company, 
+                updated_at = NOW(), 
+                due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
+                price = :price 
+            WHERE id = :id
+        ";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':ref', $data['ref']);
-        $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $data['price']);
-        $stmt->execute();
+
+        // Bind parameters and execute statement
+        try {
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':ref', $data['ref']);
+            $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+            $stmt->bindParam(':price', $data['price']);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            // Handle exception 
+            throw new Exception("Database error: " . $e->getMessage());
+        }
+        // Return the number of affected rows
         return $stmt->rowCount();
     }
     
