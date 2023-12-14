@@ -201,7 +201,8 @@ final class Ctype
      *
      * If an integer between -128 and 255 inclusive is provided,
      * it is interpreted as the ASCII value of a single character
-     * (negative values have 256 added in order to allow characters in the Extended ASCII range).
+     * (negative values have 256 added i
+     * n order to allow characters in the Extended ASCII range).
      * Any other integer is interpreted as a string containing the decimal digits of the integer.
      *
      * @param mixed  $int
