@@ -108,7 +108,7 @@ class CompanyModel {
         $query = "
             SELECT companies.*, types.name AS type_name 
             FROM companies 
-            INNER JOIN company_types ON companies.type_id = company_types.id 
+            INNER JOIN types ON companies.type_id = company_types.id 
             ORDER BY companies.id DESC 
             LIMIT 5
         ";
