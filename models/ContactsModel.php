@@ -104,6 +104,8 @@ class ContactModel {
         } catch (PDOException $e) {
             throw new Exception("Error creating contact: " . $e->getMessage());
         }
+
+        return $this->db->lastInsertId();
     }
     
     
