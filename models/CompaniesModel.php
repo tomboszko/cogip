@@ -66,44 +66,45 @@ class CompanyModel {
 
     
     
-        public function createCompany($data) {
-            // Validate input data
-            if (!isset($data['name']) || !is_string($data['name'])) {
-                throw new InvalidArgumentException("Invalid or missing company name");
-            }
-            if (!isset($data['type_id']) || !is_numeric($data['type_id'])) {
-                throw new InvalidArgumentException("Invalid or missing type_id");
-            }
-            // Add additional validation for 'country' and 'tva' if necessary
-            if (!isset($data['country']) || !is_string($data['country'])) {
-                throw new InvalidArgumentException("Invalid or missing country");
-            }
-            if (!isset($data['tva']) || !is_string($data['tva'])) {
-                throw new InvalidArgumentException("Invalid or missing tva");
-            }
-    
-            try {
-                $this->db->beginTransaction();
-    
-                // Insert into companies table
-                $query = "INSERT INTO companies (name, type_id, country, tva, created_at, updated_at) 
-                          VALUES (:name, :type_id, :country, :tva, NOW(), NOW())";
-                $stmt = $this->db->prepare($query);
-                $stmt->bindParam(':name', $data['name']);
-                $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
-                $stmt->bindParam(':country', $data['country']);  // Assuming 'country' is provided in $data
-                $stmt->bindParam(':tva', $data['tva']);          // Assuming 'tva' is provided in $data
-                $stmt->execute();
-                $companyId = $this->db->lastInsertId();
-    
-                $this->db->commit();
-                return $companyId;
-    
-            } catch (PDOException $e) {
-                $this->db->rollBack();
-                throw new Exception("Database error: " . $e->getMessage());
-            }
+    public function createCompany($data) {
+        // Validate input data
+        if (!isset($data['name']) || !is_string($data['name'])) {
+            throw new InvalidArgumentException("Invalid or missing company name");
         }
+        if (!isset($data['type_id']) || !is_numeric($data['type_id'])) {
+            throw new InvalidArgumentException("Invalid or missing type_id");
+        }
+        if (!isset($data['country']) || !is_string($data['country'])) {
+            throw new InvalidArgumentException("Invalid or missing country");
+        }
+        if (!isset($data['tva']) || !is_string($data['tva'])) {
+            throw new InvalidArgumentException("Invalid or missing tva");
+        }
+    
+        try {
+            $this->db->beginTransaction();
+    
+            // Insert into companies table
+            $query = "INSERT INTO companies (name, type_id, country, tva, created_at, updated_at) 
+                      VALUES (:name, :type_id, :country, :tva, NOW(), NOW())";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':name', $data['name']);
+            $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':country', $data['country']);
+            $stmt->bindParam(':tva', $data['tva']);
+            $stmt->execute();
+            $companyId = $this->db->lastInsertId();
+    
+            $this->db->commit();
+            return $companyId;
+    
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            // Rethrow the exception with a custom message
+            throw new Exception("Error creating company: " . $e->getMessage());
+        }
+    }
+    
     
     
 
