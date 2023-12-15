@@ -104,45 +104,101 @@ class InvoiceModel {
     }
 
 
-    public function updateInvoice($id, $data) {
-    // Validate input
-    foreach (['ref', 'id_company', 'price'] as $key) {
-        if (!isset($data[$key])) {
-            throw new InvalidArgumentException("Missing required key in data: $key");
-        }
+//     public function updateInvoice($id, $data) {
+//     // Validate input
+//     foreach (['ref', 'id_company', 'price'] as $key) {
+//         if (!isset($data[$key])) {
+//             throw new InvalidArgumentException("Missing required key in data: $key");
+//         }
+//     }
+//     // Additional type/format validations
+//     if (!is_int($data['id_company']) && !ctype_digit($data['id_company'])) {
+//         throw new InvalidArgumentException("Invalid format for id_company: must be an integer");
+//     }
+//     if (!is_numeric($data['price'])) {
+//         throw new InvalidArgumentException("Invalid format for price: must be numeric");
+//     }
+//     // Prepare SQL statement
+//     $query = "
+//         UPDATE invoices 
+//         SET ref = :ref, 
+//             id_company = :id_company, 
+//             updated_at = NOW(), 
+//             due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
+//             price = :price 
+//         WHERE id = :id
+//     ";
+//     $stmt = $this->db->prepare($query);
+//     // Bind parameters and execute statement
+//     try {
+//         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+//         $stmt->bindParam(':ref', $data['ref']);
+//         $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+//         $stmt->bindParam(':price', $data['price'], PDO::PARAM_STR); // Bind as string if decimal
+//         $stmt->execute();
+//     } catch (PDOException $e) {
+//         // Handle exception 
+//         throw new Exception("Database error: " . $e->getMessage());
+//     }
+//     // Return the number of affected rows
+//     return $stmt->rowCount();
+// }
+
+public function updateCompany($companyId, $data) {
+    // Validate input data
+    if (!is_numeric($companyId)) {
+        throw new InvalidArgumentException("Invalid company ID");
     }
-    // Additional type/format validations
-    if (!is_int($data['id_company']) && !ctype_digit($data['id_company'])) {
-        throw new InvalidArgumentException("Invalid format for id_company: must be an integer");
+
+    // Only update fields that are provided
+    $updateFields = array();
+
+    if (isset($data['name']) && is_string($data['name'])) {
+        $updateFields[] = 'name = :name';
     }
-    if (!is_numeric($data['price'])) {
-        throw new InvalidArgumentException("Invalid format for price: must be numeric");
+
+    if (isset($data['type_id']) && is_numeric($data['type_id'])) {
+        $updateFields[] = 'type_id = :type_id';
     }
-    // Prepare SQL statement
-    $query = "
-        UPDATE invoices 
-        SET ref = :ref, 
-            id_company = :id_company, 
-            updated_at = NOW(), 
-            due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
-            price = :price 
-        WHERE id = :id
-    ";
-    $stmt = $this->db->prepare($query);
-    // Bind parameters and execute statement
+
+    if (isset($data['country']) && is_string($data['country'])) {
+        $updateFields[] = 'country = :country';
+    }
+
+    if (isset($data['tva']) && is_string($data['tva'])) {
+        $updateFields[] = 'tva = :tva';
+    }
+
+    if (empty($updateFields)) {
+        throw new InvalidArgumentException("No valid fields provided for update");
+    }
+
     try {
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':ref', $data['ref']);
-        $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $data['price'], PDO::PARAM_STR); // Bind as string if decimal
+        $this->db->beginTransaction();
+
+        // Construct the update query
+        $query = "UPDATE companies SET " . implode(', ', $updateFields) . ", updated_at = NOW() WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $companyId, PDO::PARAM_INT);
+
+        // Bind parameters for update fields
+        foreach ($updateFields as $field) {
+            $fieldName = substr($field, 0, strpos($field, ' '));
+            $stmt->bindParam(':' . $fieldName, $data[$fieldName]);
+        }
+
         $stmt->execute();
+
+        $this->db->commit();
+        return true;
+
     } catch (PDOException $e) {
-        // Handle exception 
-        throw new Exception("Database error: " . $e->getMessage());
+        $this->db->rollBack();
+        // Rethrow the exception with a custom message
+        throw new Exception("Error updating company: " . $e->getMessage());
     }
-    // Return the number of affected rows
-    return $stmt->rowCount();
 }
+
 
     
 

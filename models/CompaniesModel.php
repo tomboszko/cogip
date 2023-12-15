@@ -104,59 +104,61 @@ class CompanyModel {
             throw new Exception("Error creating company: " . $e->getMessage());
         }
     }
-    
-    
-    
 
-    public function updateCompany($id, $data) {
-        // validate input
-        foreach (['name', 'type_id', 'country', 'tva'] as $key) {
-            if (!isset($data[$key])) {
-                throw new InvalidArgumentException("Missing required key in data: $key");
-            }
-        }
-
+    public function updateCompany($companyId, $data) {
         // Validate input data
-        if (!isset($data['name']) || !is_string($data['name'])) {
-            throw new InvalidArgumentException("Invalid or missing company name");
-        }
-        if (!isset($data['type_id']) || !is_numeric($data['type_id'])) {
-            throw new InvalidArgumentException("Invalid or missing type_id");
-        }
-        if (!isset($data['country']) || !is_string($data['country'])) {
-            throw new InvalidArgumentException("Invalid or missing country");
-        }
-        if (!isset($data['tva']) || !is_string($data['tva'])) {
-            throw new InvalidArgumentException("Invalid or missing tva");
+        if (!is_numeric($companyId)) {
+            throw new InvalidArgumentException("Invalid company ID");
         }
     
-        //prepare sql statement
-        $query = "
-            UPDATE companies 
-            SET name = :name, 
-                type_id = :type_id, 
-                country = :country, 
-                tva = :tva, 
-                updated_at = NOW() 
-            WHERE id = :id
-        ";
-        $stmt = $this->db->prepare($query);
-        //bind parameters and execute statement
-        try {
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':name', $data['name']);
-            $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':country', $data['country']);
-            $stmt->bindParam(':tva', $data['tva']);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            //handle exception
-            throw new Exception("Database error: " . $e->getMessage());
+        // Only update fields that are provided
+        $updateFields = array();
+    
+        if (isset($data['name']) && is_string($data['name'])) {
+            $updateFields[] = 'name = :name';
         }
-        //return the number of affected rows
-        return $stmt->rowCount();
-    }
-        
+    
+        if (isset($data['type_id']) && is_numeric($data['type_id'])) {
+            $updateFields[] = 'type_id = :type_id';
+        }
+    
+        if (isset($data['country']) && is_string($data['country'])) {
+            $updateFields[] = 'country = :country';
+        }
+    
+        if (isset($data['tva']) && is_string($data['tva'])) {
+            $updateFields[] = 'tva = :tva';
+        }
+    
+        if (empty($updateFields)) {
+            throw new InvalidArgumentException("No valid fields provided for update");
+        }
+    
+        try {
+            $this->db->beginTransaction();
+    
+            // Construct the update query
+            $query = "UPDATE companies SET " . implode(', ', $updateFields) . ", updated_at = NOW() WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $companyId, PDO::PARAM_INT);
+    
+            // Bind parameters for update fields
+            foreach ($updateFields as $field) {
+                $fieldName = substr($field, 0, strpos($field, ' '));
+                $stmt->bindParam(':' . $fieldName, $data[$fieldName]);
+            }
+    
+            $stmt->execute();
+    
+            $this->db->commit();
+            return true;
+    
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            // Rethrow the exception with a custom message
+            throw new Exception("Error updating company: " . $e->getMessage());
+        }
+    }        
 
     public function deleteCompany($id) {
         $query = "DELETE FROM companies WHERE id = :id";
