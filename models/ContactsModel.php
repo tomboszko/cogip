@@ -63,7 +63,7 @@ class ContactModel {
 
     public function createContacts($data) {
         // Validate input data
-        if (!isset($data['name']) || !filter_var($data['name'])) {
+        if (!isset($data['name']) || !is_string($data['name'])) {
             throw new InvalidArgumentException("Invalid or missing contact name");
         }
         if (!isset($data['company_id']) || !is_numeric($data['company_id'])) {
