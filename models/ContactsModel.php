@@ -52,8 +52,8 @@ class ContactModel {
     
     public function getContactById($id) {
         $query = "SELECT contacts.*, companies.name AS company_name 
-        FROM contacts 
-        INNER JOIN companies ON contacts.company_id = companies.id
+                  FROM contacts 
+                  INNER JOIN companies ON contacts.company_id = companies.id
                   WHERE contacts.id = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -112,15 +112,59 @@ class ContactModel {
     
     
     public function updateContact($id, $data) {
-        $query = "UPDATE contacts SET name = :name, company_id = :company_id, email = :email, phone = :phone, updated_at = NOW() WHERE id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':name', $data['name'], PDO::PARAM_STR);
-        $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
-        $stmt->bindParam(':phone', $data['phone'], PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->rowCount();
+        //Validate input data
+        if (!is_numeric($id)) {
+            throw new InvalidArgumentException("Invalid contact ID");
+        }
+
+        // Only update fields that are provided
+        $updateFields = array();
+
+        if (isset($data['name']) && is_string($data['name'])) {
+            $updateFields[] = 'name = :name';
+        }
+    
+        if (isset($data['company_id']) && is_numeric($data['company_id'])) {
+            $updateFields[] = 'company_id = :company_id';
+        }
+    
+        if (isset($data['email']) && is_string($data['email'])) {
+            $updateFields[] = 'email = :email';
+        }
+    
+        if (isset($data['phone']) && is_string($data['phone'])) {
+            $updateFields[] = 'phone = :phone';
+        }
+
+        if (isset($data['Avatar']) && is_string($data['Avatar'])) {
+            $updateFields[] = 'Avatar = :Avatar';
+        }
+
+        try{
+            $this->db->beginTransaction();
+
+            // Construct the update query
+            $query = "UPDATE contacts SET " . implode(', ', $updateFields) . ", updated_at = NOW() WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            // Bind parameters for update fields
+            foreach ($updateFields as $field) {
+                $fieldName = substr($field, 0, strpos($field, ' '));
+                $stmt->bindParam(':' . $fieldName, $data[$fieldName]);
+            }
+
+            // Execute the query
+            $stmt->execute();
+
+            $this->db->commit();
+            return $stmt->rowCount();
+            
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            // Rethrow the exception with a custom message
+            throw new Exception("Error updating contact: " . $e->getMessage());
+        }
     }
 
     public function deleteContact($id) {

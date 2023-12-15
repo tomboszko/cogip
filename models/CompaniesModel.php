@@ -57,15 +57,9 @@ class CompanyModel {
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        $company = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$company) {
-            return null; 
-        }
-        return $company;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
-    
-    
+       
     public function createCompany($data) {
         // Validate input data
         if (!isset($data['name']) || !is_string($data['name'])) {
