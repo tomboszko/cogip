@@ -63,12 +63,35 @@ class ContactModel {
     }
 
     public function createContacts($data) {
-        $query = "INSERT INTO Contacts (name, company_id, email, created_at, phone, updated_at) VALUES (:company_id, NOW(), NOW())";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':name', $data['name'], PDO::PARAM_INT);
-        $stmt->execute();
-        return $this->db->lastInsertId();
-    }    
+        // Validate input data
+        if (!isset($data['name']) || !is_string($data['name'])) {
+            throw new InvalidArgumentException("Invalid or missing contact name");
+        }
+        if (!isset($data['company_id']) || !is_numeric($data['company_id'])) {
+            throw new InvalidArgumentException("Invalid or missing company_id");
+        }
+        if (!isset($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException("Invalid or missing email");
+        }
+        if (!isset($data['phone']) || !is_string($data['phone'])) {
+            throw new InvalidArgumentException("Invalid or missing phone number");
+        }
+    
+        try {
+            $query = "INSERT INTO Contacts (name, company_id, email, phone, created_at, updated_at) 
+                      VALUES (:name, :company_id, :email, :phone, NOW(), NOW())";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':name', $data['name']);
+            $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->bindParam(':phone', $data['phone']);
+            $stmt->execute();
+            return $this->db->lastInsertId();
+        } catch (PDOException $e) {
+            throw new Exception("Error creating contact: " . $e->getMessage());
+        }
+    }
+       
     
     
     public function updateContact($id, $data) {
