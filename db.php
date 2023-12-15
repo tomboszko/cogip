@@ -4,22 +4,22 @@ require 'vendor/autoload.php';
 
 //LOCAL CONNECTION//
 
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-// $dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-// $host = $_ENV['DB_HOST'];
-// $db   = $_ENV['DB_DATABASE'];
-// $user = $_ENV['DB_USERNAME'];
-// $pass = $_ENV['DB_PASSWORD'];
-// $charset = 'utf8mb4';
-
-HEROKU CONNECTION ///
-
-$host = getenv('DB_HOST');
-$db   = getenv('DB_DATABASE');
-$user = getenv('DB_USERNAME');
-$pass = getenv('DB_PASSWORD');
+$host = $_ENV['DB_HOST'];
+$db   = $_ENV['DB_DATABASE'];
+$user = $_ENV['DB_USERNAME'];
+$pass = $_ENV['DB_PASSWORD'];
 $charset = 'utf8mb4';
+
+// HEROKU CONNECTION ///
+
+// $host = getenv('DB_HOST');
+// $db   = getenv('DB_DATABASE');
+// $user = getenv('DB_USERNAME');
+// $pass = getenv('DB_PASSWORD');
+// $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $opt = [
