@@ -2,6 +2,9 @@
 
 require 'vendor/autoload.php';
 
+
+
+
 //LOCAL CONNECTION//
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
