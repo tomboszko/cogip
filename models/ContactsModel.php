@@ -76,21 +76,33 @@ class ContactModel {
         if (!isset($data['phone']) || !is_string($data['phone'])) {
             throw new InvalidArgumentException("Invalid or missing phone number");
         }
-    
+        // Prepare SQL statement
+        $query = "INSERT INTO Contacts (name, company_id, email, phone, created_at, updated_at, Avatar) 
+                  VALUES (:name, :company_id, :email, :phone, NOW(), NOW(), :Avatar)";
+        $stmt = $this->db->prepare($query);
+        // Bind parameters
+        $stmt->bindParam(':name', $data['name']);
+        $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':email', $data['email']);
+        $stmt->bindParam(':phone', $data['phone']);
+        // Handle Avatar field
+        if (isset($data['Avatar']) && !empty($data['Avatar'])) {
+            
+            $stmt->bindParam(':Avatar', $data['Avatar'], PDO::PARAM_LOB);
+        } else {
+            // If Avatar is not provided, set it to NULL
+            $Avatar = null;
+            $stmt->bindParam(':Avatar', $Avatar, PDO::PARAM_NULL);
+        }
+        // Execute the query
         try {
-            $query = "INSERT INTO Contacts (name, company_id, email, phone, created_at, updated_at) 
-                      VALUES (:name, :company_id, :email, :phone, NOW(), NOW())";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':name', $data['name']);
-            $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':email', $data['email']);
-            $stmt->bindParam(':phone', $data['phone']);
             $stmt->execute();
             return $this->db->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Error creating contact: " . $e->getMessage());
         }
     }
+    
        
     
     
