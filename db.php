@@ -16,7 +16,7 @@ $user = $_ENV['DB_USERNAME'];
 $pass = $_ENV['DB_PASSWORD'];
 $charset = 'utf8mb4';
 
-//HEROKU CONNECTION ///
+HEROKU CONNECTION ///
 
 // $host = getenv('DB_HOST');
 // $db   = getenv('DB_DATABASE');
