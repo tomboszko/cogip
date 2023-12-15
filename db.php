@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-$charset = 'utf8mb4';
+
 
 
 //LOCAL CONNECTION//
@@ -14,6 +14,7 @@ $host = $_ENV['DB_HOST'];
 $db   = $_ENV['DB_DATABASE'];
 $user = $_ENV['DB_USERNAME'];
 $pass = $_ENV['DB_PASSWORD'];
+$charset = 'utf8mb4';
 
 //HEROKU CONNECTION ///
 
@@ -21,6 +22,7 @@ $pass = $_ENV['DB_PASSWORD'];
 // $db   = getenv('DB_DATABASE');
 // $user = getenv('DB_USERNAME');
 // $pass = getenv('DB_PASSWORD');
+// $charset = 'utf8mb4';
 
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
