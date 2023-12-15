@@ -50,9 +50,9 @@ class ContactsController {
     public function createContact($data) {
         $errorModel = new ErrorModel();
         try {
-            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
+            if (!isset($data['name']) || !is_string($data['name'])) {
                 http_response_code(400);
-                echo json_encode(['message' => 'contact_name']);
+                echo json_encode(['message' => 'Invalid or missing name']);
                 return;
             }
             $ContactId = $this->model->createContacts($data);
@@ -65,9 +65,9 @@ class ContactsController {
         } catch (Exception $e) {
             $errorModel->logError($e);
             $errorModel->sendErrorResponse($e);
-
         }
     }
+    
     public function updateContact($id, $data) {
         $errorModel = new ErrorModel();
         try {
