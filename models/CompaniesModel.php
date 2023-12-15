@@ -109,13 +109,54 @@ class CompanyModel {
     
 
     public function updateCompany($id, $data) {
-        $query = "UPDATE companies SET company_name = :company_name WHERE id = :id";
+        // validate input
+        foreach (['name', 'type_id', 'country', 'tva'] as $key) {
+            if (!isset($data[$key])) {
+                throw new InvalidArgumentException("Missing required key in data: $key");
+            }
+        }
+
+        // Validate input data
+        if (!isset($data['name']) || !is_string($data['name'])) {
+            throw new InvalidArgumentException("Invalid or missing company name");
+        }
+        if (!isset($data['type_id']) || !is_numeric($data['type_id'])) {
+            throw new InvalidArgumentException("Invalid or missing type_id");
+        }
+        if (!isset($data['country']) || !is_string($data['country'])) {
+            throw new InvalidArgumentException("Invalid or missing country");
+        }
+        if (!isset($data['tva']) || !is_string($data['tva'])) {
+            throw new InvalidArgumentException("Invalid or missing tva");
+        }
+    
+        //prepare sql statement
+        $query = "
+            UPDATE companies 
+            SET name = :name, 
+                type_id = :type_id, 
+                country = :country, 
+                tva = :tva, 
+                updated_at = NOW() 
+            WHERE id = :id
+        ";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':company_name', $data['company_name']);
-        $stmt->execute();
+        //bind parameters and execute statement
+        try {
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':name', $data['name']);
+            $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':country', $data['country']);
+            $stmt->bindParam(':tva', $data['tva']);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            //handle exception
+            throw new Exception("Database error: " . $e->getMessage());
+        }
+        //return the number of affected rows
         return $stmt->rowCount();
     }
+        
 
     public function deleteCompany($id) {
         $query = "DELETE FROM companies WHERE id = :id";

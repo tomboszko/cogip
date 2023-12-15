@@ -77,13 +77,7 @@ class CompaniesController {
     public function updateCompany($id, $data) {
         $errorModel = new ErrorModel(); // Instantiate the ErrorModel
         try {
-            if (!isset($data['company_name']) || !is_string($data['company_name'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'status' => 400,
-                    'message' => 'Invalid company_name']);
-                return;
-            }
+
             $result = $this->model->updateCompany($id, $data);
             header('Content-Type: application/json');
             if ($result) {
@@ -94,11 +88,12 @@ class CompaniesController {
                 http_response_code(404);
                 echo json_encode([
                     'status' => 404,
-                    'message' => 'Company not found or no changes made']);
+                    'message' => 'Company not found']);
             }
         } catch (Exception $e) {
+            // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendBadRequestResponse($e);
+            $errorModel->sendErrorResponse($e);
         }
     }
     public function deleteCompany($id) {
