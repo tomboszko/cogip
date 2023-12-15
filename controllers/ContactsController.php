@@ -71,11 +71,11 @@ class ContactsController {
     public function updateContact($id, $data) {
         $errorModel = new ErrorModel();
         try {
-            if (!isset($data['contact_name']) || !is_string($data['contact_name'])) {
+            if (!isset($data['name']) || !is_string($data['name'])) {
                 http_response_code(400);
                 echo json_encode([
                     'status' => 400,
-                    'message' => 'Invalid contact_name']);
+                    'message' => 'Invalid name']);
                 return;
             }
             $result = $this->model->updateContact($id, $data);

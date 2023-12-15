@@ -77,7 +77,7 @@ class ContactModel {
             throw new InvalidArgumentException("Invalid or missing phone number");
         }
         // Prepare SQL statement
-        $query = "INSERT INTO Contacts (name, company_id, email, phone, created_at, updated_at, Avatar) 
+        $query = "INSERT INTO contacts (name, company_id, email, phone, created_at, updated_at, Avatar) 
                   VALUES (:name, :company_id, :email, :phone, NOW(), NOW(), :Avatar)";
         $stmt = $this->db->prepare($query);
         // Bind parameters
