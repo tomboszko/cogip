@@ -100,18 +100,14 @@ class ContactModel {
         // Execute the query
         try {
             $stmt->execute();
-            return $this->db->lastInsertId();
         } catch (PDOException $e) {
+            // Handle exception
             throw new Exception("Error creating contact: " . $e->getMessage());
         }
 
+        // Return the ID of the newly created contact
         return $this->db->lastInsertId();
     }
-    
-    
-    
-       
-    
     
     public function updateContact($id, $data) {
         //Validate input data
