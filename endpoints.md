@@ -19,3 +19,5 @@
 | /contacts/{id} | PUT | Updates an existing contact by its ID. |
 | /contacts/{id} | DELETE | Deletes a contact by its ID. |
 | /companies/{id}/show | GET | Fetches all contacts for a specific company by company ID. |
+| /types | GET | Fetches all contacts. |
+

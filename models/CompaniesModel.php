@@ -74,29 +74,40 @@ class CompanyModel {
         if (!isset($data['tva']) || !is_string($data['tva'])) {
             throw new InvalidArgumentException("Invalid or missing tva");
         }
-    
-        try {
-            $this->db->beginTransaction();
-    
-            // Insert into companies table
-            $query = "INSERT INTO companies (name, type_id, country, tva, created_at, updated_at) 
-                      VALUES (:name, :type_id, :country, :tva, NOW(), NOW())";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':name', $data['name']);
-            $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':country', $data['country']);
-            $stmt->bindParam(':tva', $data['tva']);
-            $stmt->execute();
-            $companyId = $this->db->lastInsertId();
-    
-            $this->db->commit();
-            return $companyId;
-    
-        } catch (PDOException $e) {
-            $this->db->rollBack();
-            // Rethrow the exception with a custom message
-            throw new Exception("Error creating company: " . $e->getMessage());
+
+        // not same name in db
+        $query = "SELECT name FROM companies WHERE name = :name";
+        $stmt = $this->db->prepare($query); 
+        $stmt->bindParam(':name', $data['name'], PDO::PARAM_STR);
+        $stmt->execute();
+        $company = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($company) {
+            throw new InvalidArgumentException("Company already exists");
         }
+
+        // Prepare SQL statement
+
+        $query = "INSERT INTO companies (name, type_id, country, tva, created_at, updated_at) 
+                  VALUES (:name, :type_id, :country, :tva, NOW(), NOW())
+                 ";
+        $stmt = $this->db->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':name', $data['name']);
+        $stmt->bindParam(':type_id', $data['type_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':country', $data['country']);
+        $stmt->bindParam(':tva', $data['tva']);
+
+        // Execute the query
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            // Handle exception
+            throw $e;
+        }
+
+        // Return the ID of the newly created company
+        return $this->db->lastInsertId();
     }
 
     public function updateCompany($companyId, $data) {

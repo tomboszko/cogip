@@ -55,12 +55,12 @@ class CompaniesController {
     }
     public function createCompany($data) {
        $errorModel = new ErrorModel(); // Instantiate the ErrorModel
-        try {
-            if (!isset($data['name']) || !is_string($data['name'])) {
-                http_response_code(400);
-                echo json_encode(['message' => 'Invalid name']);
-                return;
-            }
+       try {
+        if (!isset($data['name']) || !is_string($data['name'])) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid or missing name']);
+            return;
+        }
             $companyId = $this->model->createCompany($data);
             header('Content-Type: application/json');
             http_response_code(201);
@@ -71,7 +71,7 @@ class CompaniesController {
         } catch (Exception $e) {
             // Use the ErrorModel to log the error and send an error response
             $errorModel->logError($e);
-            $errorModel->sendBadRequestResponse($e);
+            $errorModel->sendErrorResponse($e);
         }
     }
     public function updateCompany($id, $data) {

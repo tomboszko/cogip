@@ -22,6 +22,7 @@ require 'controllers/CompaniesController.php';
 require 'controllers/ContactsController.php';
 require 'controllers/WelcomeController.php';
 require 'controllers/ShowController.php'; 
+require 'controllers/TypesController.php';
 require 'db.php'; 
 
 use Bramus\Router\Router;
@@ -174,6 +175,17 @@ $router->get('/companies/(\d+)/show', function ($id) use ($ShowController) {
     $ShowController->getShowCompany($id);
 });
 
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
+$typesController = new TypesController($pdo);
+
+$router->get('/types', function() use ($typesController) {
+    $typesController->getAllTypes();
+});
+
+
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
 
 $router->get('/api/routes', function() {
     $routes = [
@@ -182,32 +194,38 @@ $router->get('/api/routes', function() {
         'link' => 'https://cogip-api-8d6f281a9687.herokuapp.com/',
         'Endpoint' => [
             
-        'Invoices' => [
-            ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
-            ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
-            ['method' => 'POST', 'path' => '/invoices', 'description' => 'Create a new invoice'],
-            ['method' => 'PUT', 'path' => '/invoices/{id}', 'description' => 'Update an existing invoice'],
-            ['method' => 'DELETE', 'path' => '/invoices/{id}', 'description' => 'Delete an invoice'],
-            ['method' => 'GET', 'path' => '/invoices/last', 'description' => 'Get the last 5 invoices'],
-        ],
-        'Companies' => [
-            ['method' => 'GET', 'path' => '/companies', 'description' => 'Fetch all companies with pagination'],
-            ['method' => 'GET', 'path' => '/companies/{id}', 'description' => 'Fetch a single company by ID'],
-            ['method' => 'POST', 'path' => '/companies', 'description' => 'Create a new company'],
-            ['method' => 'PUT', 'path' => '/companies/{id}', 'description' => 'Update an existing company'],
-            ['method' => 'DELETE', 'path' => '/companies/{id}', 'description' => 'Delete a company'],
-            ['method' => 'GET', 'path' => '/companies/last', 'description' => 'Get the last 5 companies'],
-        ],
-        'Contacts' => [
-            ['method' => 'GET', 'path' => '/contacts', 'description' => 'Fetch all contacts with pagination'],
-            ['method' => 'GET', 'path' => '/contacts/{id}', 'description' => 'Fetch a single contact by ID'],
-            ['method' => 'POST', 'path' => '/contacts', 'description' => 'Create a new contact'],
-            ['method' => 'PUT', 'path' => '/contacts/{id}', 'description' => 'Update an existing contact'],
-            ['method' => 'DELETE', 'path' => '/contacts/{id}', 'description' => 'Delete a contact'],
-            ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Get the last 5 contacts'],
+            'Invoices' => [
+                ['method' => 'GET', 'path' => '/invoices', 'description' => 'Fetch all invoices with pagination'],
+                ['method' => 'GET', 'path' => '/invoices/{id}', 'description' => 'Fetch a single invoice by ID'],
+                ['method' => 'POST', 'path' => '/invoices', 'description' => 'Create a new invoice'],
+                ['method' => 'PUT', 'path' => '/invoices/{id}', 'description' => 'Update an existing invoice'],
+                ['method' => 'DELETE', 'path' => '/invoices/{id}', 'description' => 'Delete an invoice'],
+                ['method' => 'GET', 'path' => '/invoices/last', 'description' => 'Get the last 5 invoices'],
+            ],
+            'Companies' => [
+                ['method' => 'GET', 'path' => '/companies', 'description' => 'Fetch all companies with pagination'],
+                ['method' => 'GET', 'path' => '/companies/{id}', 'description' => 'Fetch a single company by ID'],
+                ['method' => 'POST', 'path' => '/companies', 'description' => 'Create a new company'],
+                ['method' => 'PUT', 'path' => '/companies/{id}', 'description' => 'Update an existing company'],
+                ['method' => 'DELETE', 'path' => '/companies/{id}', 'description' => 'Delete a company'],
+                ['method' => 'GET', 'path' => '/companies/last', 'description' => 'Get the last 5 companies'],
+            ],
+            'Contacts' => [
+                ['method' => 'GET', 'path' => '/contacts', 'description' => 'Fetch all contacts with pagination'],
+                ['method' => 'GET', 'path' => '/contacts/{id}', 'description' => 'Fetch a single contact by ID'],
+                ['method' => 'POST', 'path' => '/contacts', 'description' => 'Create a new contact'],
+                ['method' => 'PUT', 'path' => '/contacts/{id}', 'description' => 'Update an existing contact'],
+                ['method' => 'DELETE', 'path' => '/contacts/{id}', 'description' => 'Delete a contact'],
+                ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Get the last 5 contacts'],
+            ],
+            'Show' => [
+                ['method' => 'GET', 'path' => '/companies/{id}/show', 'description' => 'Fetch all contacts and invoices for a company'],
+            ],
+            'type' => [
+                ['method' => 'GET', 'path' => '/types', 'description' => 'Fetch all types and invoices for a company'],
+            ]
         ]
-    ]
-        ];
+    ];
 
 
     header('Content-Type: application/json');
