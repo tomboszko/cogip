@@ -50,7 +50,6 @@ class ContactModel {
         ];
     }
     
-
     public function getContactById($id) {
         $query = "SELECT contacts.*, companies.name AS company_name 
         FROM contacts 
@@ -76,24 +75,28 @@ class ContactModel {
         if (!isset($data['phone']) || !is_string($data['phone'])) {
             throw new InvalidArgumentException("Invalid or missing phone number");
         }
+    
         // Prepare SQL statement
         $query = "INSERT INTO contacts (name, company_id, email, phone, created_at, updated_at, Avatar) 
                   VALUES (:name, :company_id, :email, :phone, NOW(), NOW(), :Avatar)";
         $stmt = $this->db->prepare($query);
+    
         // Bind parameters
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':company_id', $data['company_id'], PDO::PARAM_INT);
         $stmt->bindParam(':email', $data['email']);
         $stmt->bindParam(':phone', $data['phone']);
-        // Handle Avatar field
+    
+        // Handle the Avatar field
         if (isset($data['Avatar']) && !empty($data['Avatar'])) {
-            
-            $stmt->bindParam(':Avatar', $data['Avatar'], PDO::PARAM_LOB);
+            // If Avatar is provided, use it
+            $stmt->bindParam(':Avatar', $data['Avatar']);
         } else {
-            // If Avatar is not provided, set it to NULL
+            // If Avatar is not provided, use NULL to trigger the default value
             $Avatar = null;
             $stmt->bindParam(':Avatar', $Avatar, PDO::PARAM_NULL);
         }
+    
         // Execute the query
         try {
             $stmt->execute();
@@ -102,6 +105,8 @@ class ContactModel {
             throw new Exception("Error creating contact: " . $e->getMessage());
         }
     }
+    
+    
     
        
     
