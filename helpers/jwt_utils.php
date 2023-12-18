@@ -1,6 +1,10 @@
 <?php
 // jwt_utils.php
+
 use Firebase\JWT\JWT;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
+use Firebase\JWT\BeforeValidException;
 
 function generate_jwt_token($user_id, $secret_key) {
     $issued_at = time();
@@ -15,5 +19,16 @@ function generate_jwt_token($user_id, $secret_key) {
     return JWT::encode($payload, $secret_key);
 }
 
-
-?>
+function validate_jwt_token($jwt_token, $secret_key) {
+    try {
+        return JWT::decode($jwt_token, $secret_key, array('HS256'));
+    } catch (ExpiredException $e) {
+        throw new Exception('Token expired');
+    } catch (SignatureInvalidException $e) {
+        throw new Exception('Invalid token signature');
+    } catch (BeforeValidException $e) {
+        throw new Exception('Token not valid yet');
+    } catch (Exception $e) {
+        throw new Exception('Invalid token');
+    }
+}
