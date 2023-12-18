@@ -262,7 +262,7 @@ $app->get('/protected', function (Request $request, Response $response) {
     $auth_header = $request->getHeader('Authorization');
 
     if (empty($auth_header)) {
-        return $response->withStatus(401)->withHeader('Content-Type', 'application/json')->withJson('Unauthorized');
+        return $response->withStatus(401)->withHeader('Content-Type', 'application/json')->write('Unauthorized');
     }
 
     $jwt_token = str_replace('Bearer ', '', $auth_header[0]);
@@ -278,10 +278,6 @@ $app->get('/protected', function (Request $request, Response $response) {
     } catch (Exception $e) {
         return $response->withStatus(401)->withHeader('Content-Type', 'application/json')->write('Unauthorized');
     }
-});
-
-$app->get('/public', function (Request $request, Response $response) {
-    return $response->withHeader('Content-Type', 'application/json')->write('Public resource');
 });
 
 
