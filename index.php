@@ -40,7 +40,7 @@ $router = new Router();
 //     $welcomeController->getLastInvoices();
 // });
 
-// Instantiate the InvoicesController once
+// Instantiate the InvoicesController
 $invoicesController = new InvoicesController($pdo);
 // Define routes 
 
