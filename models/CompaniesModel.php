@@ -166,13 +166,29 @@ class CompanyModel {
     }        
 
     public function deleteCompany($id) {
-        $query = "DELETE FROM companies WHERE id = :id";
+        $this->db->beginTransaction();  // Assuming $this->db supports transactions
+        
+        try {
+            $this->deleteFromTable('companies', 'id', $id);
+            $this->deleteFromTable('invoices', 'id_company', $id);
+            $this->deleteFromTable('contacts', 'company_id', $id);
+    
+            $this->db->commit();  // Commit the transaction if everything is successful
+            return true;
+        } catch (PDOException $e) {
+            $this->db->rollBack();  // Rollback the transaction if something failed
+            throw $e;
+        }
+    }
+    
+    private function deleteFromTable($table, $column, $id) {
+        $query = "DELETE FROM $table WHERE $column = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->rowCount();
-    }       
-    
+    }
+
+        
     public function getLastCompanies() {
         $query = "
             SELECT companies.*, types.name AS type_name 
