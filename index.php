@@ -23,9 +23,11 @@ require 'controllers/ContactsController.php';
 require 'controllers/WelcomeController.php';
 require 'controllers/ShowController.php'; 
 require 'controllers/TypesController.php';
+require 'jwt_utils.php';
 require 'db.php'; 
 
 use Bramus\Router\Router;
+
 
 $router = new Router();
 
@@ -186,6 +188,7 @@ $router->get('/types', function() use ($typesController) {
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
+// Define routes
 
 $router->get('/api/routes', function() {
     $routes = [
@@ -233,11 +236,55 @@ $router->get('/api/routes', function() {
 });
 
 
-
-
-
-
 // Run the router
 $router->run();
+
+
+
+$app = new \Slim\App;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+$app->post('/login', function (Request $request, Response $response) {
+    $user_id = 1; // assuming the user is authenticated
+    $secret_key = 'your_secret_key';
+
+    $jwt_token = generate_jwt_token($user_id, $secret_key);
+
+    $response_data = array('token' => $jwt_token);
+    $response->getBody()->write(json_encode($response_data));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+
+$app->get('/protected', function (Request $request, Response $response) {
+    $auth_header = $request->getHeader('Authorization');
+
+    if (empty($auth_header)) {
+        return $response->withStatus(401)->withHeader('Content-Type', 'application/json')->withJson('Unauthorized');
+    }
+
+    $jwt_token = str_replace('Bearer ', '', $auth_header[0]);
+    $secret_key = 'your_secret_key';
+
+    try {
+        $decoded_payload = validate_jwt_token($jwt_token, $secret_key);
+        $user_id = $decoded_payload->sub;
+
+        // Fetch the protected resource for the user
+        $resource = 'Protected resource for user ' . $user_id;
+        return $response->withHeader('Content-Type', 'application/json')->write($resource);
+    } catch (Exception $e) {
+        return $response->withStatus(401)->withHeader('Content-Type', 'application/json')->write('Unauthorized');
+    }
+});
+
+$app->get('/public', function (Request $request, Response $response) {
+    return $response->withHeader('Content-Type', 'application/json')->write('Public resource');
+});
+
+
+$app->run();
 
 ?>
