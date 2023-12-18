@@ -36,8 +36,24 @@ function generate_jwt_token($user_id, $pdo, $alg = 'HS256') {
 }
 
 function validate_jwt_token($jwt_token, $pdo, $alg = 'HS256') {
-    $secret_key = 'your_secret_key'; // Use the same key you used to generate the JWT
+    // Decode the token without verifying the signature
+    $decoded = JWT::decode($jwt_token, null, false);
 
+    // Get the user ID from the token
+    $user_id = $decoded->sub;
+
+    // Query the database for the user's secret key
+    $stmt = $pdo->prepare("SELECT password FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        throw new Exception('User not found');
+    }
+
+    $secret_key = $user['secret_key'];
+
+    // Verify the token with the user's secret key
     try {
         return JWT::decode($jwt_token, $secret_key, array($alg));
     } catch (ExpiredException $e) {
