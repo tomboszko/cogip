@@ -6,7 +6,7 @@ use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
 use Firebase\JWT\BeforeValidException;
 
-function generate_jwt_token($user_id, $secret_key) {
+function generate_jwt_token($user_id, $secret_key, $alg = 'HS256') {
     $issued_at = time();
     $expiration_time = $issued_at + (60 * 60); // valid for 1 hour
 
@@ -16,7 +16,9 @@ function generate_jwt_token($user_id, $secret_key) {
         'sub' => $user_id
     );
 
-    return JWT::encode($payload, $secret_key);
+    $jwt = JWT::encode($payload, $secret_key, $alg);
+    var_dump($jwt);
+    return $jwt;
 }
 
 function validate_jwt_token($jwt_token, $secret_key) {
