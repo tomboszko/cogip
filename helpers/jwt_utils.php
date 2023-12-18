@@ -1,11 +1,20 @@
 <?php
 
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
+require_once './db.php';
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
 use \Firebase\JWT\SignatureInvalidException;
 use \Firebase\JWT\BeforeValidException;
+
+
+class utils {
+    protected $db;
+
+    public function __construct($database) {
+        $this->db = $database;
+    }
 
 function loginUser($email, $password, $pdo) {
     $stmt = $pdo->prepare("SELECT id, password FROM users WHERE email = :email");
@@ -55,7 +64,8 @@ function validate_jwt_token($jwt_token, $pdo, $alg = 'HS256') {
 
     // Verify the token with the user's secret key
     try {
-        return JWT::decode($jwt_token, $secret_key, array($alg));
+        $decoded = JWT::decode($jwt_token, $secret_key, array($alg));
+        return $decoded;
     } catch (ExpiredException $e) {
         throw new Exception('Token expired');
     } catch (SignatureInvalidException $e) {
@@ -74,4 +84,5 @@ function verifyToken($jwt, $pdo) {
     } catch (Exception $e) {
         // Handle invalid token (e.g., send a 401 Unauthorized response)
     }
+}
 }

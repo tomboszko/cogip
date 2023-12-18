@@ -1,12 +1,9 @@
 <?php
 
 require_once 'jwt_utils.php';
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 require_once 'db.php';
 
-
-// Create a new PDO instance
-$pdo = new PDO($dsn, $user, $pass,);
 
 // Test loginUser function
 $email = 'jc.ranu@cogip.com';
