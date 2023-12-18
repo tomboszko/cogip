@@ -1,6 +1,6 @@
 <?php
 
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
@@ -39,7 +39,8 @@ function validate_jwt_token($jwt_token, $pdo, $alg = 'HS256') {
     $secret_key = 'your_secret_key'; // Use the same key you used to generate the JWT
 
     try {
-        return JWT::decode($jwt_token, $secret_key, array($alg));
+        $decoded = JWT::decode($jwt_token, $secret_key, array($alg));
+        return $decoded;
     } catch (ExpiredException $e) {
         throw new Exception('Token expired');
     } catch (SignatureInvalidException $e) {
