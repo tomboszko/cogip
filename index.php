@@ -188,7 +188,7 @@ $router->get('/types', function() use ($typesController) {
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
-// Define routes
+// Define routes for the API documentation
 
 $router->get('/api/routes', function() {
     $routes = [
@@ -235,11 +235,12 @@ $router->get('/api/routes', function() {
     echo json_encode($routes, JSON_PRETTY_PRINT);
 });
 
-
 // Run the router
 $router->run();
 
-
+////////////////////////////////
+///// JWT authentication //////
+//////////////////////////////
 
 $app = new \Slim\App;
 
