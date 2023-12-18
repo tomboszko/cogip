@@ -20,6 +20,7 @@ return array(
     'Lcobucci\\JWT\\' => array($vendorDir . '/lcobucci/jwt/src'),
     'Lcobucci\\Clock\\' => array($vendorDir . '/lcobucci/clock/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Defuse\\Crypto\\' => array($vendorDir . '/defuse/php-encryption/src'),
 );
