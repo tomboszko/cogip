@@ -131,4 +131,19 @@ class CompaniesController {
             $errorModel->sendErrorResponse($e);
         }
     }
+
+    public function getCompaniesAndId(){
+        $errorModel = new ErrorModel(); // Instantiate the ErrorModel
+        try {
+            $result = $this->model->getCompaniesAndId();
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 200, 
+                'data' => $result], JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            // Use the ErrorModel to log the error and send an error response
+            $errorModel->logError($e);
+            $errorModel->sendErrorResponse($e);
+        }
+    }
 }

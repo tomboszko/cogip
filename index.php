@@ -23,7 +23,6 @@ require 'controllers/ContactsController.php';
 require 'controllers/WelcomeController.php';
 require 'controllers/ShowController.php'; 
 require 'controllers/TypesController.php';
-require 'jwt_utils.php';
 require 'db.php'; 
 
 use Bramus\Router\Router;
@@ -123,6 +122,12 @@ $router->get('/companies/last', function() use ($companiesController) {
     $companiesController->getLastCompanies();
 });
 
+//get companies and ID
+$router->get('/fetchcompanies', function() use ($companiesController) {
+    $companiesController->getCompaniesAndId();
+});
+
+
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 
 // Instantiate the ContactsController once
@@ -212,6 +217,7 @@ $router->get('/api/routes', function() {
                 ['method' => 'PUT', 'path' => '/companies/{id}', 'description' => 'Update an existing company'],
                 ['method' => 'DELETE', 'path' => '/companies/{id}', 'description' => 'Delete a company'],
                 ['method' => 'GET', 'path' => '/companies/last', 'description' => 'Get the last 5 companies'],
+                ['method' => 'GET', 'path' => '/fetchcompanies', 'description' => 'Fetch all contacts and invoices for a company'],
             ],
             'Contacts' => [
                 ['method' => 'GET', 'path' => '/contacts', 'description' => 'Fetch all contacts with pagination'],
@@ -219,7 +225,7 @@ $router->get('/api/routes', function() {
                 ['method' => 'POST', 'path' => '/contacts', 'description' => 'Create a new contact'],
                 ['method' => 'PUT', 'path' => '/contacts/{id}', 'description' => 'Update an existing contact'],
                 ['method' => 'DELETE', 'path' => '/contacts/{id}', 'description' => 'Delete a contact'],
-                ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Get the last 5 contacts'],
+                ['method' => 'GET', 'path' => '/contacts/last', 'description' => 'Fetches all companies and ID'],
             ],
             'Show' => [
                 ['method' => 'GET', 'path' => '/companies/{id}/show', 'description' => 'Fetch all contacts and invoices for a company'],

@@ -20,4 +20,5 @@
 | /contacts/{id} | DELETE | Deletes a contact by its ID. |
 | /companies/{id}/show | GET | Fetches all contacts for a specific company by company ID. |
 | /types | GET | Fetches all contacts. |
+| /fetchcompanies | GET | Fetches all companies and ID. |
 

@@ -165,29 +165,35 @@ class CompanyModel {
         }
     }        
 
+
+//delete of the company by its ID with delete of invoice and contact tables associated with the company ID
     public function deleteCompany($id) {
         $this->db->beginTransaction();  // Assuming $this->db supports transactions
-        
+
         try {
-            $this->deleteFromTable('companies', 'id', $id);
-            $this->deleteFromTable('invoices', 'id_company', $id);
-            $this->deleteFromTable('contacts', 'company_id', $id);
-    
-            $this->db->commit();  // Commit the transaction if everything is successful
-            return true;
+            // Delete the company
+            if (!$this->deleteCompanyById($id)) {
+                throw new Exception("Error deleting company");
+            }
+
+            // Delete the invoices associated with the company
+            $query = "DELETE FROM invoices WHERE company_id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Delete the contacts associated with the company
+            $query = "DELETE FROM contacts WHERE company_id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
         } catch (PDOException $e) {
-            $this->db->rollBack();  // Rollback the transaction if something failed
-            throw $e;
+            $this->db->rollBack();
+            // Rethrow the exception with a custom message
+            throw new Exception("Error deleting company: " . $e->getMessage());
         }
     }
-    
-    private function deleteFromTable($table, $column, $id) {
-        $query = "DELETE FROM $table WHERE $column = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
         
     public function getLastCompanies() {
         $query = "
@@ -202,5 +208,19 @@ class CompanyModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
+    public function getCompaniesAndId(){
+        $this->db->beginTransaction();
+        try {
+            $query = "SELECT id, name FROM companies";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->db->commit();
+            return $companies;
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            throw new Exception("Error getting companies: " . $e->getMessage());
+        }
+    }
     
 }
