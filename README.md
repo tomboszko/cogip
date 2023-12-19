@@ -69,7 +69,7 @@ and, for sure, all the endpoints as following:
 
 **Database Structure**
 
-
+*to be continued...*
 
 #### Future Enhancements
 
