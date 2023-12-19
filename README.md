@@ -20,8 +20,8 @@ Developed as part of the BeCode bootcamp, the COGIP project is a web application
 
 ## Team  Contributions
 
-Bastien: Focused on setting up the MVC architecture and integrating the Bramus Router for efficient request handling.
-Thomas: Worked on database interactions, including CRUD operations, and implemented filp/whoops for error management.
+[Bastien](https://github.com/bastien-venturi): Focused on setting up the MVC architecture and integrating the Bramus Router for efficient request handling.
+Thomas (me): Worked on database interactions, including CRUD operations, and implemented filp/whoops for error management.
 Getting Started
 
 
