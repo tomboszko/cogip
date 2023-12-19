@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 require 'vendor/autoload.php';
 
 // CORS POLICIES
-header('Access-Control-Allow-Origin: http://localhost:5173, https://cogip-seven.vercel.app/');
+header('Access-Control-Allow-Origin: https://cogip-seven.vercel.app/');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Headers: Content-type, Authorization');
 header('HTTP/1.1 200 OK');
