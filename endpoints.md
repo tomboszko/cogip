@@ -21,4 +21,3 @@
 | /companies/{id}/show | GET | Fetches all contacts for a specific company by company ID. |
 | /types | GET | Fetches all contacts. |
 | /fetchcompanies | GET | Fetches all companies and ID. |
-
