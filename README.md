@@ -36,7 +36,7 @@ Thomas (me): Worked on database interactions, including CRUD operations, and imp
 
 We provide to the frontend's the URL to deployed project on Heroku :
 
-[API cogip](https://cogip-api-8d6f281a9687.herokuapp.com/)
+[https://cogip-api-8d6f281a9687.herokuapp.com/](https://cogip-api-8d6f281a9687.herokuapp.com/)
 
 and, for sure, all the endpoints as following:
 
