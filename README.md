@@ -83,7 +83,7 @@ The API created by Bastien & myself, is called by our frontend teammates :
 
 [Antoine](https://github.com/antoinel74) and [Pierre](https://github.com/Pierremarien)
 
-You can find the repo here: [Linkt to the repo frontend side](https://github.com/antoinel74/COGIP)
+You can find the repo here: [Linkt to the repo frontend side](https://github.com/antoinel74/COGIP) and the deployed project here: [COGIP](https://cogip-seven.vercel.app/)
 
 
 
