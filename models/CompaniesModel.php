@@ -166,34 +166,41 @@ class CompanyModel {
     }        
 
 
-//delete of the company by its ID with delete of invoice and contact tables associated with the company ID
-    public function deleteCompany($id) {
-        $this->db->beginTransaction();  // Assuming $this->db supports transactions
+//delete the company by its ID with delete of invoice and contact tables associated with the company ID
 
-        try {
-            // Delete the company
-            if (!$this->deleteCompanyById($id)) {
-                throw new Exception("Error deleting company");
-            }
+public function deleteCompany($id) {
+    $this->db->beginTransaction();
 
-            // Delete the invoices associated with the company
-            $query = "DELETE FROM invoices WHERE company_id = :id";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
+    try {
+        // Delete from invoices table
+        $queryInvoices = "DELETE FROM invoices WHERE id_company = :id";
+        $stmtInvoices = $this->db->prepare($queryInvoices);
+        $stmtInvoices->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtInvoices->execute();
 
-            // Delete the contacts associated with the company
-            $query = "DELETE FROM contacts WHERE company_id = :id";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            
-        } catch (PDOException $e) {
-            $this->db->rollBack();
-            // Rethrow the exception with a custom message
-            throw new Exception("Error deleting company: " . $e->getMessage());
-        }
+        // Delete from contacts table
+        $queryContacts = "DELETE FROM contacts WHERE company_id = :id";
+        $stmtContacts = $this->db->prepare($queryContacts);
+        $stmtContacts->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtContacts->execute();
+
+        // Delete from companies table
+        $queryCompany = "DELETE FROM companies WHERE id = :id";
+        $stmtCompany = $this->db->prepare($queryCompany);
+        $stmtCompany->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmtCompany->execute();
+
+        $this->db->commit();
+        return true;
+
+    } catch (PDOException $e) {
+        $this->db->rollBack();
+        // Rethrow the exception with a custom message
+        throw new Exception("Error deleting company: " . $e->getMessage());
     }
+}
+
+
         
     public function getLastCompanies() {
         $query = "
@@ -207,6 +214,7 @@ class CompanyModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     
     public function getCompaniesAndId(){
         $this->db->beginTransaction();
