@@ -20,12 +20,25 @@ Developed as part of the BeCode bootcamp, the COGIP project is a web application
 
 ## Team  Contributions
 
+### backend
+
 [Bastien](https://github.com/bastien-venturi): Focused on setting up the MVC architecture and integrating the Bramus Router for efficient request handling.
+
 Thomas (me): Worked on database interactions, including CRUD operations, and implemented filp/whoops for error management.
-Getting Started
 
+We have implemented many others features, but there was the main work for each of us.
 
-[Linkt to the repo frontend side](https://github.com/antoinel74/COGIP)
+### frontend
+
+The API created by Bastien & myself, is called by our frontend teammates :
+
+[Antoine](https://github.com/antoinel74)
+
+and
+
+[Pierre](https://github.com/Pierremarien)
+
+Here's the link to the repo of the frontend side project: [Linkt to the repo frontend side](https://github.com/antoinel74/COGIP)
 
 
 Backend Functionality
