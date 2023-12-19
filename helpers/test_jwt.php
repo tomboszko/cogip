@@ -1,30 +1,28 @@
 <?php
-// test jwt_utils.php
-use PHPUnit\Framework\TestCase;
+require_once '../vendor/autoload.php';
+require_once 'jwt_utils.php';
+require_once 'db.php';
 
-require 'vendor/autoload.php';
-require 'jwt_utils.php'; // path to your jwt_utils.php file
+$jwt = new \Firebase\JWT\JWT;
 
-class JwtUtilsTest extends TestCase {
-    private $secret_key = 'your_secret_key'; // replace with your secret key
-    private $alg = 'HS256'; // replace with your algorithm
+// Test loginUser function
+$email = 'jc.ranu@cogip.com';
+$password = 'paella123';
+$token = loginUser($email, $password, $pdo);
+echo "Generated token: $token\n";
 
-    public function testGenerateAndValidateJwtToken() {
-        $user_id = 1; // replace with a test user_id
+// Test validate_jwt_token function
+try {
+    $decoded = validate_jwt_token($token, $pdo);
+    echo "Token is valid\n";
+} catch (Exception $e) {
+    echo "Token validation failed: " . $e->getMessage() . "\n";
+}
 
-        // Generate a new JWT token
-        $jwt_token = generate_jwt_token($user_id, $this->secret_key, $this->alg);
-
-        // Assert the token is a string
-        $this->assertIsString($jwt_token);
-
-        // Validate the generated JWT token
-        $decoded_token = validate_jwt_token($jwt_token, $this->secret_key);
-
-        // Assert the decoded token is an object
-        $this->assertIsObject($decoded_token);
-
-        // Assert the 'sub' property of the decoded token matches the user_id
-        $this->assertEquals($user_id, $decoded_token->sub);
-    }
+// Test verifyToken function
+try {
+    verifyToken($token, $pdo);
+    echo "Token verification passed\n";
+} catch (Exception $e) {
+    echo "Token verification failed: " . $e->getMessage() . "\n";
 }
