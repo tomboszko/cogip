@@ -1,5 +1,7 @@
 # COGIP Project - Backend Focus
 
+## Deployed project: [COGIP](https://cogip-seven.vercel.app/)
+
 ## About The Project
 
 Developed as part of the BeCode bootcamp, the COGIP project is a web application designed to modernize the accounting process for Jean-Christian Ranu at COGIP. This application primarily focuses on backend functionalities to enhance efficiency and user experience in accounting tasks.
@@ -79,11 +81,11 @@ Implementing additional backend features as per project requirements.
 
 ### frontend
 
-The API created by Bastien & myself, is called by our frontend teammates :
+The API created by Bastien & myself, is called by our frontend teammates :[COGIP](https://cogip-seven.vercel.app/)
 
 [Antoine](https://github.com/antoinel74) and [Pierre](https://github.com/Pierremarien)
 
-You can find the repo here: [Linkt to the repo frontend side](https://github.com/antoinel74/COGIP) and the deployed project here: [COGIP](https://cogip-seven.vercel.app/)
+You can find the repo here: [Linkt to the repo frontend side](https://github.com/antoinel74/COGIP)
 
 
 
