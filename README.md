@@ -38,8 +38,7 @@ We provide to the frontend's the URL to deployed project on Heroku :
 
 [API cogip](https://cogip-api-8d6f281a9687.herokuapp.com/)
 
-
-and, for sure, all the end points as following:
+and, for sure, all the endpoints as following:
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
@@ -68,7 +67,7 @@ and, for sure, all the end points as following:
 
 **Database Structure**
 
-Detailed information on the database schema and relationships, focusing on backend data management.
+
 
 #### Future Enhancements
 
