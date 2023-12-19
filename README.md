@@ -32,11 +32,18 @@ Thomas (me): Worked on database interactions, including CRUD operations, and imp
 
 **Validation** & Sanitization: Ensures data integrity and security.
 
-**API Development**: Provide endpoints for frontend interactions.
+**API Development**: 
 
+We provide to the frontend's the URL to deployed project on Heroku :
+
+[API cogip](https://cogip-api-8d6f281a9687.herokuapp.com/)
+
+
+and, for sure, all the end points as following:
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
+| /api/routes | GET | Fetches and map all routes. |
 | /invoices | GET | Fetches all invoices with pagination. |
 | /invoices/{id} | GET | Fetches a single invoice by its ID. |
 | /invoices | POST | Creates a new invoice. |
