@@ -23,6 +23,7 @@ require 'controllers/ContactsController.php';
 require 'controllers/WelcomeController.php';
 require 'controllers/ShowController.php'; 
 require 'controllers/TypesController.php';
+require 'jwt_utils.php';
 require 'db.php'; 
 
 use Bramus\Router\Router;
