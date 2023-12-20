@@ -7,10 +7,10 @@ require 'vendor/autoload.php';
 
 //  CORS POLICIES
 //header('Access-Control-Allow-Origin: , https://cogip-seven.vercel.app/');
-//header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Origin: http://localhost:5173');
 //ATTENTION: message d'erreur quand on utilise l'origin ci-dessous
 // MESSAGE: <b>Warning</b>:  Undefined array key "HTTP_ORIGIN" in <b>/app/index.php</b> on line <b>10</b><br />
-header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+//header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Headers: Content-type, Authorization');
 header('HTTP/1.1 200 OK');
