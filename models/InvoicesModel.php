@@ -54,96 +54,56 @@ class InvoiceModel {
         ];
     }
 
-    public function getInvoiceById($id) {
-        $query = "SELECT invoices.*, companies.name AS company_name 
-          FROM invoices 
-          INNER JOIN companies ON invoices.id_company = companies.id 
-          WHERE invoices.id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    
-    public function createInvoice($data) {
-        // Validate input
-        if (!isset($data['id_company']) || !is_numeric($data['id_company']) || intval($data['id_company']) != $data['id_company']) {
-            throw new InvalidArgumentException("Invalid or missing id_company: must be an integer");
-        }
-        if (!isset($data['price']) || !is_numeric($data['price'])) {
-            throw new InvalidArgumentException("Invalid or missing price: must be numeric");
-        }
-        // Check if ref is provided and validate
-        if (isset($data['ref'])) {
-            if (!is_string($data['ref'])) {
-                throw new InvalidArgumentException("Invalid format for ref: must be a string");
-            }
-            if (strlen($data['ref']) > 50) {
-                throw new InvalidArgumentException("Invalid length for ref: must be 50 characters or less");
-            }
-        } else {
-            $data['ref'] = null; // Set default value if ref is not provided
-        }
+    public function updateInvoice($id, $data) {
         // Prepare SQL statement
-        $query = "INSERT INTO invoices (ref, id_company, created_at, updated_at, due_date, price) 
-                  VALUES (:ref, :id_company, NOW(), NOW(), DATE_ADD(NOW(), INTERVAL 2 MONTH), :price)";
+        $query = "UPDATE invoices SET updated_at = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH)";
+
+        // Add fields to the query based on the keys present in $data
+        foreach ($data as $key => $value) {
+            switch ($key) {
+                case 'ref':
+                    $query .= ", ref = :ref";
+                    break;
+                case 'id_company':
+                    if (!is_int($value) && !ctype_digit($value)) {
+                        throw new InvalidArgumentException("Invalid format for id_company: must be an integer");
+                    }
+                    $query .= ", id_company = :id_company";
+                    break;
+                case 'price':
+                    if (!is_numeric($value)) {
+                        throw new InvalidArgumentException("Invalid format for price: must be numeric");
+                    }
+                    $query .= ", price = :price";
+                    break;
+            }
+        }
+
+        $query .= " WHERE id = :id";
+
         $stmt = $this->db->prepare($query);
+
         // Bind parameters and execute statement
         try {
-            $stmt->bindParam(':ref', $data['ref']);
-            $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-            $stmt->bindParam(':price', $data['price']);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            if (isset($data['ref'])) {
+                $stmt->bindParam(':ref', $data['ref']);
+            }
+            if (isset($data['id_company'])) {
+                $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
+            }
+            if (isset($data['price'])) {
+                $stmt->bindParam(':price', $data['price'], PDO::PARAM_STR); // Bind as string if decimal
+            }
             $stmt->execute();
         } catch (PDOException $e) {
-            // Handle exception
-            throw $e;
+            // Handle exception 
+            throw new Exception("Database error: " . $e->getMessage());
         }
-        // Return the ID of the newly created invoice
-        return $this->db->lastInsertId();
-    }
 
-
-    public function updateInvoice($id, $data) {
-    // Validate input
-    foreach (['ref', 'id_company', 'price'] as $key) {
-        if (!isset($data[$key])) {
-            throw new InvalidArgumentException("Missing required key in data: $key");
-        }
+        // Return the number of affected rows
+        return $stmt->rowCount();
     }
-    // Additional type/format validations
-    if (!is_int($data['id_company']) && !ctype_digit($data['id_company'])) {
-        throw new InvalidArgumentException("Invalid format for id_company: must be an integer");
-    }
-    if (!is_numeric($data['price'])) {
-        throw new InvalidArgumentException("Invalid format for price: must be numeric");
-    }
-    // Prepare SQL statement
-    $query = "
-        UPDATE invoices 
-        SET ref = :ref, 
-            id_company = :id_company, 
-            updated_at = NOW(), 
-            due_date = DATE_ADD(NOW(), INTERVAL 2 MONTH), 
-            price = :price 
-        WHERE id = :id
-    ";
-    $stmt = $this->db->prepare($query);
-    // Bind parameters and execute statement
-    try {
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':ref', $data['ref']);
-        $stmt->bindParam(':id_company', $data['id_company'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $data['price'], PDO::PARAM_STR); // Bind as string if decimal
-        $stmt->execute();
-    } catch (PDOException $e) {
-        // Handle exception 
-        throw new Exception("Database error: " . $e->getMessage());
-    }
-    // Return the number of affected rows
-    return $stmt->rowCount();
-}
-
     
 
     public function deleteInvoice($id) {
