@@ -73,9 +73,13 @@ and, for sure, all the endpoints as following:
 
 #### Future Enhancements
 
-Improving API security.
+**Improving API security:** 
 
-Optimizing database queries for performance.
+due to a lack of time, we didn't implemented authentication and ApiKey. We will see later to implement these features.
+
+**Optimizing database queries for performance:**
+
+We used db4free.net to host our database and for this litlle project it works but requests take a lot of time... (but it's free...)  
 
 Implementing additional backend features as per project requirements.
 
