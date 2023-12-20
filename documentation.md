@@ -10,7 +10,7 @@ The base URL for the API is: `https://cogip-api-8d6f281a9687.herokuapp.com/`
 
 ## Authentication
 
-ther's no authetication... lack of time... Sorry.
+there's no authetication... lack of time... Sorry.
 
 ## Endpoints
 | Endpoint | Method | Description |
