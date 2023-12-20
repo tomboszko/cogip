@@ -71,7 +71,7 @@ and, for sure, all the endpoints as following:
 
 **Database Structure**
 
-*to be continued...*
+![dbStructure](https://github.com/tomboszko/cogip/assets/132305348/2bf8d747-43cd-41bc-b243-63919fc7540a)
 
 #### Future Enhancements
 
