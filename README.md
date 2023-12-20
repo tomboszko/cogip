@@ -2,6 +2,8 @@
 
 ## Deployed project: [COGIP](https://cogip-seven.vercel.app/)
 
+## Documentation : [How to cogip](https://github.com/tomboszko/cogip/blob/bcd722093c11f7743d8662572bc42ac159ccce2d/documentation.md)
+
 ## About The Project
 
 Developed as part of the BeCode bootcamp, the COGIP project is a web application designed to modernize the accounting process for Jean-Christian Ranu at COGIP. This application primarily focuses on backend functionalities to enhance efficiency and user experience in accounting tasks.
@@ -69,7 +71,7 @@ and, for sure, all the endpoints as following:
 
 **Database Structure**
 
-*to be continued...*
+![dbStructure](https://github.com/tomboszko/cogip/assets/132305348/2bf8d747-43cd-41bc-b243-63919fc7540a)
 
 #### Future Enhancements
 
