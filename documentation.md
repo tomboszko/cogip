@@ -1,13 +1,16 @@
 # COGIP API Documentation
 
 ## Introduction
+
 This document describes the endpoints and usage of the COGIP API, designed to provide backend services for the COGIP web application.
 
 ## Base URL
+
 The base URL for the API is: `https://cogip-api-8d6f281a9687.herokuapp.com/`
 
 ## Authentication
-(Provide details on the authentication process, if applicable.)
+
+ther's no authetication... lack of time... Sorry.
 
 ## Endpoints
 | Endpoint | Method | Description |
