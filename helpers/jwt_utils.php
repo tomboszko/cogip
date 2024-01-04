@@ -1,7 +1,7 @@
 <?php
 
 require_once '../vendor/autoload.php';
-require_once './db.php';
+require_once(__DIR__ . '/../db.php');
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
